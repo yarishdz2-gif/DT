@@ -3,128 +3,314 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Envío de Archivos ZIP</title>
+  <title>Portal de Entrega ZIP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-color: #050505;
+      --card-bg: rgba(25, 25, 25, 0.6);
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.1);
+      --success: #10b981;
+      --warning-gold: #fbbf24;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
     }
+
     body {
-      background-color: #0f172a;
-      color: #f8fafc;
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+      color: var(--text-main);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 1rem;
+      padding: 2rem;
       position: relative;
-    }
-    
-    /* UI del contador de Tokens a la derecha */
-    .token-counter {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background-color: #1e293b;
-      border: 2px solid #fbbf24;
-      color: #fbbf24;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1.1rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-      transition: transform 0.2s;
+      overflow: hidden;
     }
 
+    /* Contador de Tokens con efecto Neon */
+    .token-counter {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      background: rgba(20, 20, 20, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--warning-gold);
+      color: var(--warning-gold);
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    /* Tarjeta Principal Glassmorphism */
     .container {
-      background-color: #1e293b;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      padding: 3rem;
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       width: 100%;
-      max-width: 420px;
+      max-width: 480px;
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    h2 {
-      margin-bottom: 1.5rem;
-      color: #38bdf8;
+
+    .container:hover {
+      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    .header {
       text-align: center;
+      margin-bottom: 2.5rem;
     }
+
+    .header h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(to right, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
     .form-group {
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
     }
+
     label {
       display: block;
       margin-bottom: 0.5rem;
       font-size: 0.9rem;
-      color: #cbd5e1;
+      font-weight: 600;
+      color: #e2e8f0;
     }
-    input[type="text"],
-    input[type="file"] {
+
+    input[type="text"] {
       width: 100%;
-      padding: 0.65rem;
-      border-radius: 4px;
-      border: 1px solid #334155;
-      background-color: #0f172a;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background-color: rgba(0, 0, 0, 0.5);
       color: #fff;
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      outline: none;
     }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Estilo personalizado para el input de archivo */
+    .file-upload-wrapper {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      border: 2px dashed var(--border-color);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background-color: rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .file-upload-wrapper:hover {
+      border-color: var(--primary);
+      background-color: rgba(59, 130, 246, 0.05);
+    }
+
+    .file-upload-wrapper input[type="file"] {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-upload-text {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .file-name-display {
+      margin-top: 8px;
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 0.9rem;
+    }
+
+    /* Advertencia de Penalización */
+    .warning-box {
+      background-color: var(--danger-bg);
+      border-left: 4px solid var(--danger);
+      padding: 12px 16px;
+      border-radius: 4px 8px 8px 4px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .warning-box p {
+      color: #fca5a5;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin: 0;
+    }
+
     button {
       width: 100%;
-      padding: 0.75rem;
-      background-color: #0284c7;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary), #4f46e5);
       color: #fff;
       border: none;
-      border-radius: 4px;
-      font-weight: bold;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
     }
+
     button:hover {
-      background-color: #0369a1;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
     }
+
+    button:active {
+      transform: translateY(0);
+    }
+
     button:disabled {
-      background-color: #475569;
+      background: #475569;
+      box-shadow: none;
       cursor: not-allowed;
+      transform: none;
     }
+
     .status {
-      margin-top: 1rem;
-      padding: 0.75rem;
-      border-radius: 4px;
+      margin-top: 1.5rem;
+      padding: 12px;
+      border-radius: 10px;
       display: none;
       text-align: center;
-      font-size: 0.9rem;
-      line-height: 1.4;
+      font-size: 0.95rem;
+      font-weight: 600;
+      animation: fadeIn 0.4s ease-out forwards;
     }
+
     .status.success {
-      background-color: #166534;
-      color: #bbf7d0;
+      background-color: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--success);
+      color: #34d399;
     }
+
     .status.error {
-      background-color: #991b1b;
-      color: #fecaca;
+      background-color: var(--danger-bg);
+      border: 1px solid var(--danger);
+      color: #f87171;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .token-counter {
+        top: 15px;
+        right: 15px;
+        font-size: 1rem;
+        padding: 8px 16px;
+      }
+      .container {
+        padding: 2rem 1.5rem;
+        margin-top: 50px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Contador de Tokens -->
-  <div class="token-counter" id="tokenDisplay">🪙 Tokens: 0</div>
+  <!-- Contador de Tokens Superior Derecho -->
+  <div class="token-counter" id="tokenDisplay">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+      <path d="M12 18V6"></path>
+    </svg>
+    <span id="tokenValue">0 Tokens</span>
+  </div>
 
   <div class="container">
-    <h2>Subir Archivo ZIP</h2>
+    <div class="header">
+      <h2>Portal de Entrega</h2>
+      <p>Sube tus archivos comprimidos de forma segura</p>
+    </div>
+
+    <!-- Panel de Advertencia -->
+    <div class="warning-box">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+        <line x1="12" y1="9" x2="12" y2="13"></line>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+      <p><strong>⚠️ ADVERTENCIA:</strong> Si envías archivos ZIP incorrectos, falsos o maliciosos, se te penalizará con <strong>-10 tokens</strong> de tu cuenta.</p>
+    </div>
+
     <form id="uploadForm">
       <div class="form-group">
-        <label for="username">Usuario de Discord (Solo tu nombre)</label>
-        <input type="text" id="username" placeholder="Ejemplo: iker_dev" required>
+        <label for="username">Nombre Exacto de Discord</label>
+        <input type="text" id="username" placeholder="Escribe tu nombre de usuario" required autocomplete="off">
       </div>
 
       <div class="form-group">
-        <label for="zipFile">Seleccionar archivo (.zip)</label>
-        <input type="file" id="zipFile" accept=".zip" required>
+        <label>Archivo (.zip)</label>
+        <div class="file-upload-wrapper" id="dropZone">
+          <input type="file" id="zipFile" accept=".zip" required>
+          <div class="file-upload-text" id="fileText">
+            Haz clic o arrastra tu archivo .zip aquí
+          </div>
+          <div class="file-name-display" id="fileNameDisplay"></div>
+        </div>
       </div>
 
-      <button type="submit" id="submitBtn">Entregar</button>
+      <button type="submit" id="submitBtn">Entregar Archivo</button>
     </form>
 
     <div id="statusMessage" class="status"></div>
@@ -136,32 +322,50 @@
     const statusDiv = document.getElementById('statusMessage');
     const submitBtn = document.getElementById('submitBtn');
     const tokenDisplay = document.getElementById('tokenDisplay');
+    const tokenValueSpan = document.getElementById('tokenValue');
+    const fileInput = document.getElementById('zipFile');
+    const fileText = document.getElementById('fileText');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
     
-    let userTokens = 0; // Inicia el contador de tokens
+    // Sistema de tokens persistente (guarda en el navegador localmente)
+    let userTokens = parseInt(localStorage.getItem('userTokens')) || 0;
+    updateTokenUI();
+
+    // Actualizar nombre del archivo al seleccionarlo
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        fileText.style.display = 'none';
+        fileNameDisplay.textContent = file.name;
+      } else {
+        fileText.style.display = 'block';
+        fileNameDisplay.textContent = '';
+      }
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const username = document.getElementById('username').value.trim();
-      const fileInput = document.getElementById('zipFile');
       const file = fileInput.files[0];
 
       if (!file) {
-        showStatus('Selecciona un archivo.', 'error');
+        showStatus('Por favor, selecciona un archivo.', 'error');
         return;
       }
 
       if (!file.name.toLowerCase().endsWith('.zip')) {
-        showStatus('Solo se permiten archivos con formato .zip', 'error');
+        showStatus('Formato no válido. Solo se permiten archivos .zip', 'error');
         return;
       }
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Enviando...';
+      submitBtn.textContent = 'Procesando entrega...';
+      statusDiv.style.display = 'none';
 
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('content', `**Nuevo archivo recibido**\n**Usuario de Discord:** ${username}`);
+      formData.append('content', `**📦 Nueva Entrega Registrada**\n**👤 Usuario:** \`${username}\``);
 
       try {
         const response = await fetch(WEBHOOK_URL, {
@@ -170,32 +374,44 @@
         });
 
         if (response.ok) {
-          // Sumar 5 tokens
+          // Lógica de recompensa
           userTokens += 5;
-          tokenDisplay.textContent = `🪙 Tokens: ${userTokens}`;
+          localStorage.setItem('userTokens', userTokens); // Guarda los tokens
+          updateTokenUI();
           
-          // Animación visual pequeña en los tokens
-          tokenDisplay.style.transform = 'scale(1.1)';
-          setTimeout(() => tokenDisplay.style.transform = 'scale(1)', 200);
+          // Animación del contador
+          tokenDisplay.style.transform = 'scale(1.15)';
+          tokenDisplay.style.boxShadow = '0 0 30px rgba(251, 191, 36, 0.8)';
+          setTimeout(() => {
+            tokenDisplay.style.transform = 'scale(1)';
+            tokenDisplay.style.boxShadow = '0 0 15px rgba(251, 191, 36, 0.2)';
+          }, 300);
 
-          // Mostrar mensaje de éxito solicitado
           showStatus('✔ Has obtenido +5 tokens para cambiarlos por dinero. Reclama tus tokens con el CEO.', 'success');
+          
+          // Resetear formulario visualmente
           form.reset();
+          fileText.style.display = 'block';
+          fileNameDisplay.textContent = '';
         } else {
-          showStatus('Error al enviar el archivo a Discord. Verifica el webhook.', 'error');
+          showStatus('Error al conectar con el servidor de Discord.', 'error');
         }
       } catch (err) {
-        showStatus('Error de conexión al procesar el envío.', 'error');
+        showStatus('Error de red. Verifica tu conexión e intenta de nuevo.', 'error');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Entregar';
+        submitBtn.textContent = 'Entregar Archivo';
       }
     });
 
     function showStatus(message, type) {
-      statusDiv.textContent = message;
+      statusDiv.innerHTML = message;
       statusDiv.className = `status ${type}`;
       statusDiv.style.display = 'block';
+    }
+
+    function updateTokenUI() {
+      tokenValueSpan.textContent = `${userTokens} Tokens`;
     }
   </script>
 </body>
