@@ -43,6 +43,102 @@
       overflow-x: hidden;
     }
 
+    /* Welcome / Auth Gate Overlay (First Screen) */
+    .auth-gate-wrapper {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-deep);
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0px, transparent 60%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 1.5rem;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .auth-gate-wrapper.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .auth-gate-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-color);
+      border-radius: 28px;
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 460px;
+      text-align: center;
+      box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.8);
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .auth-gate-logo {
+      font-size: 2.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #818cf8, #c084fc, #e879f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .auth-gate-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.5;
+    }
+
+    .auth-gate-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .auth-gate-btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .auth-gate-btn.primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      border: none;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .auth-gate-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.6);
+    }
+
+    .auth-gate-btn.secondary {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .auth-gate-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
     /* Top Navigation / Wallet & Admin Pills */
     .top-nav {
       position: absolute;
@@ -111,6 +207,11 @@
       position: relative;
       z-index: 10;
       animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      display: none; /* Oculto hasta que inicie sesión o se registre */
+    }
+
+    .container.active {
+      display: block;
     }
 
     @keyframes fadeIn {
@@ -368,7 +469,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 100;
+      z-index: 300;
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -514,8 +615,26 @@
 </head>
 <body>
 
-  <!-- Top Right Interactive Pills -->
-  <div class="top-nav">
+  <!-- Initial Gate Screen (Register / Login Choice) -->
+  <div class="auth-gate-wrapper" id="authGate">
+    <div class="auth-gate-card">
+      <div class="auth-gate-logo">QyrexApi</div>
+      <div class="auth-gate-desc">Portal Elite de Entregas y Gestión de Tokens. Selecciona una opción para continuar.</div>
+      <div class="auth-gate-actions">
+        <button class="auth-gate-btn primary" id="gateLoginBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Iniciar Sesión
+        </button>
+        <button class="auth-gate-btn secondary" id="gateRegisterBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          Registrar Cuenta Nueva
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Right Interactive Pills (Visible after login) -->
+  <div class="top-nav" id="topNav" style="display: none;">
     <button class="pill-btn wallet" id="walletBtn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
       <span id="navTokenCount">1 Token ($0.02)</span>
@@ -528,13 +647,9 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l7 4v6c0 5.25-3.5 10.15-7 11.25C8.5 22.15 5 17.25 5 12V6l7-4z"/></svg>
       Admin Panel
     </button>
-    <button class="pill-btn" id="registerBtn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
-      Registrar
-    </button>
-    <button class="pill-btn" id="loginBtn" style="border-color: var(--primary);">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-      <span id="loginBtnText">Login</span>
+    <button class="pill-btn" id="logoutNavBtn" style="border-color: var(--danger); color: #fca5a5;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span id="navUserLabel">Salir</span>
     </button>
   </div>
 
@@ -586,7 +701,7 @@
         </div>
         <button type="submit" class="submit-btn" style="margin-top: 10px;">Crear Cuenta</button>
       </form>
-      <button class="close-modal-btn" style="margin-top: 10px; background: transparent; color: var(--text-muted);" onclick="toggleModal('registerModal', false)">Cancelar</button>
+      <button class="close-modal-btn" style="margin-top: 10px; background: transparent; color: var(--text-muted);" onclick="closeRegisterModal()">Cancelar</button>
     </div>
   </div>
 
@@ -599,8 +714,8 @@
       </div>
       <form id="loginForm" style="text-align: left;">
         <div class="form-group">
-          <label for="loginUser">Usuario</label>
-          <input type="text" id="loginUser" placeholder="Tu usuario (ej. owner)..." required autocomplete="off">
+          <label for="loginUser">Usuario (ej: owner)</label>
+          <input type="text" id="loginUser" placeholder="Tu usuario..." required autocomplete="off">
         </div>
         <div class="form-group">
           <label for="loginPass">Contraseña</label>
@@ -608,7 +723,7 @@
         </div>
         <button type="submit" class="submit-btn" style="margin-top: 10px;">Entrar</button>
       </form>
-      <button class="close-modal-btn" style="margin-top: 10px; background: transparent; color: var(--text-muted);" onclick="toggleModal('loginModal', false)">Cancelar</button>
+      <button class="close-modal-btn" style="margin-top: 10px; background: transparent; color: var(--text-muted);" onclick="closeLoginModal()">Cancelar</button>
     </div>
   </div>
 
@@ -641,7 +756,7 @@
   </div>
 
   <!-- Main Application Card -->
-  <div class="container">
+  <div class="container" id="mainContainer">
     <div class="header">
       <h1>QyrexApi | Entregas ZIP</h1>
       <p>Sube tus archivos comprimidos al sistema centralizado de QyrexApi</p>
@@ -752,6 +867,13 @@
     checkAuthStatus();
 
     // DOM Elements
+    const authGate = document.getElementById('authGate');
+    const mainContainer = document.getElementById('mainContainer');
+    const topNav = document.getElementById('topNav');
+
+    const gateLoginBtn = document.getElementById('gateLoginBtn');
+    const gateRegisterBtn = document.getElementById('gateRegisterBtn');
+
     const form = document.getElementById('uploadForm');
     const submitBtn = document.getElementById('submitBtn');
     const statusMsg = document.getElementById('statusMessage');
@@ -761,12 +883,23 @@
     
     const walletBtn = document.getElementById('walletBtn');
     const historyBtn = document.getElementById('historyBtn');
-    const registerBtn = document.getElementById('registerBtn');
-    const loginBtn = document.getElementById('loginBtn');
     const adminPillBtn = document.getElementById('adminPillBtn');
+    const logoutNavBtn = document.getElementById('logoutNavBtn');
     
     const registerForm = document.getElementById('registerForm');
     const loginForm = document.getElementById('loginForm');
+
+    // Gate buttons action
+    gateLoginBtn.addEventListener('click', () => toggleModal('loginModal', true));
+    gateRegisterBtn.addEventListener('click', () => toggleModal('registerModal', true));
+
+    function closeRegisterModal() {
+      toggleModal('registerModal', false);
+    }
+
+    function closeLoginModal() {
+      toggleModal('loginModal', false);
+    }
 
     // Event Listeners for Modals
     walletBtn.addEventListener('click', () => toggleModal('walletModal', true));
@@ -774,24 +907,14 @@
       renderHistory();
       toggleModal('historyModal', true);
     });
-    
-    registerBtn.addEventListener('click', () => toggleModal('registerModal', true));
-    
-    loginBtn.addEventListener('click', () => {
-      if (currentUser) {
-        if (currentUser.toLowerCase() === 'owner') {
-          toggleModal('adminModal', true);
-        } else {
-          alert(`Sesión activa como: ${currentUser}. No tienes privilegios de owner.`);
-        }
-      } else {
-        toggleModal('loginModal', true);
-      }
-    });
 
     adminPillBtn.addEventListener('click', () => {
       updateAdminStats();
       toggleModal('adminModal', true);
+    });
+
+    logoutNavBtn.addEventListener('click', () => {
+      logoutUser();
     });
 
     // Register Handler
@@ -807,9 +930,14 @@
 
       registeredUsers.push({ username: u, password: p });
       localStorage.setItem('qyrex_users', JSON.stringify(registeredUsers));
+      
+      // Auto login after register
+      currentUser = u;
+      localStorage.setItem('qyrex_current_user', currentUser);
+      
       toggleModal('registerModal', false);
       registerForm.reset();
-      showStatus(`✔ ¡Cuenta "${u}" registrada con éxito! Ya puedes iniciar sesión.`, 'success');
+      checkAuthStatus();
     });
 
     // Login Handler
@@ -826,10 +954,6 @@
         checkAuthStatus();
         toggleModal('loginModal', false);
         loginForm.reset();
-        showStatus(`✔ Sesión iniciada como "${currentUser}".`, 'success');
-        if (currentUser.toLowerCase() === 'owner') {
-          toggleModal('adminModal', true);
-        }
       } else {
         alert('Usuario o contraseña incorrectos.');
       }
@@ -837,18 +961,20 @@
 
     function checkAuthStatus() {
       if (currentUser) {
-        registerBtn.style.display = 'none';
+        authGate.classList.add('hidden');
+        mainContainer.classList.add('active');
+        topNav.style.display = 'flex';
+        document.getElementById('navUserLabel').textContent = currentUser;
+
         if (currentUser.toLowerCase() === 'owner') {
           adminPillBtn.style.display = 'flex';
-          document.getElementById('loginBtnText').textContent = 'Panel Admin';
         } else {
           adminPillBtn.style.display = 'none';
-          document.getElementById('loginBtnText').textContent = currentUser;
         }
       } else {
-        registerBtn.style.display = 'flex';
-        adminPillBtn.style.display = 'none';
-        document.getElementById('loginBtnText').textContent = 'Login';
+        authGate.classList.remove('hidden');
+        mainContainer.classList.remove('active');
+        topNav.style.display = 'none';
       }
     }
 
@@ -857,7 +983,6 @@
       localStorage.removeItem('qyrex_current_user');
       checkAuthStatus();
       toggleModal('adminModal', false);
-      showStatus('Sesión cerrada correctamente.', 'success');
     }
 
     function clearSystemHistory() {
@@ -927,7 +1052,7 @@
 
       let messageContent = `**📦 NUEVA ENTREGA DE ARCHIVO ZIP [QYREXAPI]**\n`;
       if (isUrgent) messageContent = `🚨 **[PRIORIDAD ALTA]** 🚨\n` + messageContent;
-      if (isPrivate) messageContent = `🔒 **[ENVÍO CONFIDENCAL]**\n` + messageContent;
+      if (isPrivate) messageContent = `🔒 **[ENVÍO CONFIDENCIAL]**\n` + messageContent;
 
       messageContent += `👤 **Usuario:** \`${username}\`\n`;
       if (discordId) messageContent += `🆔 **ID:** <@${discordId}>\n`;
