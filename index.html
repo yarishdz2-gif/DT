@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Envío de Archivos ZIP</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    .container {
+      background-color: #1e293b;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 420px;
+    }
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #38bdf8;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 0.65rem;
+      border-radius: 4px;
+      border: 1px solid #334155;
+      background-color: #0f172a;
+      color: #fff;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #0284c7;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #0369a1;
+    }
+    button:disabled {
+      background-color: #475569;
+      cursor: not-allowed;
+    }
+    .status {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 4px;
+      display: none;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .status.success {
+      background-color: #166534;
+      color: #bbf7d0;
+    }
+    .status.error {
+      background-color: #991b1b;
+      color: #fecaca;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Subir Archivo ZIP</h2>
+    <form id="uploadForm">
+      <div class="form-group">
+        <label for="username">Usuario de Discord</label>
+        <input type="text" id="username" placeholder="TuUsuario" required>
+      </div>
+
+      <div class="form-group">
+        <label for="zipFile">Seleccionar archivo (.zip)</label>
+        <input type="file" id="zipFile" accept=".zip" required>
+      </div>
+
+      <button type="submit" id="submitBtn">Entregar</button>
+    </form>
+
+    <div id="statusMessage" class="status"></div>
+  </div>
+
+  <script>
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1543795264475897966/qjOKGpTG010S9Brmd1HLFNXjenDDWRp7iccuuELCGM07IQhk_sMPZUYgcR8CvH4AMeqe";
+    const form = document.getElementById('uploadForm');
+    const statusDiv = document.getElementById('statusMessage');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value.trim();
+      const fileInput = document.getElementById('zipFile');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        showStatus('Selecciona un archivo.', 'error');
+        return;
+      }
+
+      if (!file.name.toLowerCase().endsWith('.zip')) {
+        showStatus('Solo se permiten archivos con formato .zip', 'error');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('content', `**Nuevo archivo recibido**\n**Usuario de Discord:** ${username}`);
+
+      try {
+        const response = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          showStatus('✔ Archivo entregado con éxito.', 'success');
+          form.reset();
+        } else {
+          showStatus('Error al enviar el archivo a Discord.', 'error');
+        }
+      } catch (err) {
+        showStatus('Error de conexión al procesar el envío.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Entregar';
+      }
+    });
+
+    function showStatus(message, type) {
+      statusDiv.textContent = message;
+      statusDiv.className = `status ${type}`;
+      statusDiv.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
