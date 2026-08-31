@@ -19,7 +19,25 @@
       align-items: center;
       min-height: 100vh;
       padding: 1rem;
+      position: relative;
     }
+    
+    /* UI del contador de Tokens a la derecha */
+    .token-counter {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #1e293b;
+      border: 2px solid #fbbf24;
+      color: #fbbf24;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s;
+    }
+
     .container {
       background-color: #1e293b;
       padding: 2rem;
@@ -76,6 +94,7 @@
       display: none;
       text-align: center;
       font-size: 0.9rem;
+      line-height: 1.4;
     }
     .status.success {
       background-color: #166534;
@@ -88,12 +107,16 @@
   </style>
 </head>
 <body>
+
+  <!-- Contador de Tokens -->
+  <div class="token-counter" id="tokenDisplay">🪙 Tokens: 0</div>
+
   <div class="container">
     <h2>Subir Archivo ZIP</h2>
     <form id="uploadForm">
       <div class="form-group">
-        <label for="username">Usuario de Discord</label>
-        <input type="text" id="username" placeholder="TuUsuario" required>
+        <label for="username">Usuario de Discord (Solo tu nombre)</label>
+        <input type="text" id="username" placeholder="Ejemplo: iker_dev" required>
       </div>
 
       <div class="form-group">
@@ -112,6 +135,9 @@
     const form = document.getElementById('uploadForm');
     const statusDiv = document.getElementById('statusMessage');
     const submitBtn = document.getElementById('submitBtn');
+    const tokenDisplay = document.getElementById('tokenDisplay');
+    
+    let userTokens = 0; // Inicia el contador de tokens
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -144,10 +170,19 @@
         });
 
         if (response.ok) {
-          showStatus('✔ Archivo entregado con éxito.', 'success');
+          // Sumar 5 tokens
+          userTokens += 5;
+          tokenDisplay.textContent = `🪙 Tokens: ${userTokens}`;
+          
+          // Animación visual pequeña en los tokens
+          tokenDisplay.style.transform = 'scale(1.1)';
+          setTimeout(() => tokenDisplay.style.transform = 'scale(1)', 200);
+
+          // Mostrar mensaje de éxito solicitado
+          showStatus('✔ Has obtenido +5 tokens para cambiarlos por dinero. Reclama tus tokens con el CEO.', 'success');
           form.reset();
         } else {
-          showStatus('Error al enviar el archivo a Discord.', 'error');
+          showStatus('Error al enviar el archivo a Discord. Verifica el webhook.', 'error');
         }
       } catch (err) {
         showStatus('Error de conexión al procesar el envío.', 'error');
