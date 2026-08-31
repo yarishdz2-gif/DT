@@ -3,87 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portal de Desarrollo | Entregas ZIP</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Nexus Hub | Portal Elite de Entregas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #030712;
-      --card-bg: rgba(17, 24, 39, 0.75);
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --danger: #ef4444;
-      --danger-bg: rgba(239, 68, 68, 0.15);
+      --bg-deep: #030712;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent: #a855f7;
       --success: #10b981;
-      --warning-gold: #fbbf24;
+      --danger: #ef4444;
+      --warning: #fbbf24;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --border-color: rgba(255, 255, 255, 0.1);
-      --input-bg: rgba(0, 0, 0, 0.4);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --input-bg: rgba(3, 7, 18, 0.6);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
     body {
-      background-color: var(--bg-color);
+      background-color: var(--bg-deep);
       background-image: 
-        radial-gradient(at 10% 20%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-        radial-gradient(at 90% 80%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
       color: var(--text-main);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: 2rem;
+      padding: 2rem 1rem;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* Token Button - Perfect Flex Alignment */
-    .token-counter {
+    /* Top Navigation / Wallet Pill */
+    .top-nav {
       position: absolute;
-      top: 30px;
-      right: 40px;
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--warning-gold);
-      color: var(--warning-gold);
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-weight: 700;
-      font-size: 1.05rem;
-      box-shadow: 0 0 15px rgba(251, 191, 36, 0.15);
-      transition: all 0.2s ease;
+      top: 25px;
+      right: 35px;
+      display: flex;
+      gap: 12px;
+      z-index: 50;
+    }
+
+    .pill-btn {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 18px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
-      z-index: 10;
+      gap: 8px;
       cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
 
-    .token-counter:hover {
-      transform: scale(1.05);
-      background: rgba(30, 41, 59, 0.9);
-      box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+    .pill-btn:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(99, 102, 241, 0.25);
     }
 
-    /* Main Container */
+    .pill-btn.wallet {
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+
+    .pill-btn.wallet:hover {
+      box-shadow: 0 6px 25px rgba(251, 191, 36, 0.25);
+    }
+
+    /* Main Card Layout */
     .container {
-      background: var(--card-bg);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--border-color);
+      border-radius: 24px;
       padding: 2.5rem;
-      border-radius: 16px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
       width: 100%;
-      max-width: 600px; /* Ampliado para doble columna */
-      margin-top: 40px;
+      max-width: 640px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+      position: relative;
+      z-index: 10;
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .header {
@@ -91,13 +111,14 @@
       margin-bottom: 2rem;
     }
 
-    .header h2 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      background: linear-gradient(to right, #60a5fa, #c084fc);
+    .header h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #818cf8, #c084fc, #e879f9);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
     }
 
     .header p {
@@ -105,25 +126,36 @@
       font-size: 0.95rem;
     }
 
-    .warning-box {
-      background-color: var(--danger-bg);
+    /* Warning Banner */
+    .warning-banner {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
       border-left: 4px solid var(--danger);
-      padding: 12px 16px;
-      border-radius: 4px 8px 8px 4px;
-      margin-bottom: 1.5rem;
+      padding: 14px 18px;
+      border-radius: 12px;
+      margin-bottom: 1.8rem;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 12px;
     }
 
-    .warning-box p {
+    .warning-banner svg {
+      color: var(--danger);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .warning-banner p {
       color: #fca5a5;
       font-size: 0.85rem;
       line-height: 1.5;
-      margin: 0;
     }
 
-    /* Grid Layout for Forms */
+    .warning-banner strong {
+      color: #fff;
+    }
+
+    /* Form Styles */
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -135,62 +167,66 @@
       margin-bottom: 1.25rem;
     }
 
-    /* Perfect Label Alignment */
     label {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
       gap: 8px;
-      margin-bottom: 0.5rem;
       font-size: 0.85rem;
       font-weight: 600;
       color: #cbd5e1;
+      margin-bottom: 0.5rem;
+    }
+
+    label svg {
+      color: var(--primary);
     }
 
     input[type="text"], select, textarea {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 8px;
+      padding: 13px 16px;
+      border-radius: 12px;
       border: 1px solid var(--border-color);
       background-color: var(--input-bg);
       color: #fff;
       font-size: 0.95rem;
-      transition: border-color 0.3s, box-shadow 0.3s;
+      transition: all 0.3s ease;
       outline: none;
     }
-    
+
+    input[type="text"]:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      background-color: rgba(3, 7, 18, 0.9);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    }
+
     select option {
       background-color: #0f172a;
       color: #fff;
     }
 
-    input[type="text"]:focus, select:focus, textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-
-    /* Drag & Drop Zone */
-    .file-upload-wrapper {
+    /* Drop Zone */
+    .drop-zone {
       position: relative;
-      width: 100%;
-      height: 110px;
-      border: 2px dashed rgba(148, 163, 184, 0.4);
-      border-radius: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      background-color: var(--input-bg);
-      transition: all 0.3s ease;
+      border: 2px dashed rgba(148, 163, 184, 0.25);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      background: var(--input-bg);
       cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
-    .file-upload-wrapper:hover {
+    .drop-zone:hover {
       border-color: var(--primary);
-      background-color: rgba(59, 130, 246, 0.08);
+      background: rgba(99, 102, 241, 0.04);
     }
 
-    .file-upload-wrapper input[type="file"] {
+    .drop-zone input[type="file"] {
       position: absolute;
       width: 100%;
       height: 100%;
@@ -198,137 +234,131 @@
       cursor: pointer;
     }
 
-    .file-upload-text {
-      color: var(--text-muted);
-      font-size: 0.9rem;
+    .drop-zone-icon {
+      color: var(--primary);
+      background: rgba(99, 102, 241, 0.1);
+      padding: 12px;
+      border-radius: 50%;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      pointer-events: none;
     }
 
-    .file-name-display {
-      margin-top: 8px;
-      font-weight: 600;
-      color: var(--primary);
+    .drop-zone-text {
       font-size: 0.9rem;
+      color: var(--text-muted);
     }
 
-    /* Checkbox Alignment */
-    .checkbox-container {
+    .drop-zone-text strong {
+      color: var(--primary);
+    }
+
+    .file-name {
+      font-weight: 600;
+      color: var(--success);
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+
+    /* Options Panel (Checkboxes) */
+    .options-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 12px;
-      border-radius: 8px;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--border-color);
+      padding: 14px;
+      border-radius: 12px;
       margin-bottom: 1.5rem;
     }
 
-    .checkbox-group {
+    .checkbox-wrapper {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper span {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #cbd5e1;
+    }
+
+    /* Submit Action Button */
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       gap: 10px;
     }
 
-    .checkbox-group input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-      accent-color: var(--primary);
-    }
-
-    .checkbox-group label {
-      margin: 0;
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-
-    /* Submit Button - Perfect Icon & Text Alignment */
-    button.submit-btn {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--primary), #4f46e5);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px; /* Espacio exacto entre ícono y texto */
-    }
-
-    button.submit-btn:hover {
+    .submit-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.6);
     }
 
-    button.submit-btn:disabled {
-      background: #475569;
+    .submit-btn:disabled {
+      background: #334155;
       box-shadow: none;
       cursor: not-allowed;
       transform: none;
     }
 
-    .status {
+    /* Status Notifications */
+    .status-box {
       margin-top: 1.5rem;
-      padding: 12px;
-      border-radius: 8px;
-      display: none;
-      text-align: center;
+      padding: 14px;
+      border-radius: 12px;
       font-size: 0.9rem;
       font-weight: 500;
+      text-align: center;
+      display: none;
+      animation: popIn 0.3s ease;
     }
 
-    .status.success {
-      background-color: rgba(16, 185, 129, 0.15);
+    .status-box.success {
+      background: rgba(16, 185, 129, 0.1);
       border: 1px solid var(--success);
       color: #34d399;
     }
 
-    .status.error {
-      background-color: var(--danger-bg);
+    .status-box.error {
+      background: rgba(239, 68, 68, 0.1);
       border: 1px solid var(--danger);
       color: #f87171;
     }
 
-    /* Modal Styling */
+    /* Modals Overlay */
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(5px);
+      inset: 0;
+      background: rgba(3, 7, 18, 0.8);
+      backdrop-filter: blur(8px);
       display: none;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       z-index: 100;
       opacity: 0;
       transition: opacity 0.3s ease;
-    }
-
-    .modal-content {
-      background: #0f172a;
-      border: 1px solid #334155;
-      padding: 2.5rem;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 380px;
-      text-align: center;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-      transform: translateY(-20px);
-      transition: transform 0.3s ease;
     }
 
     .modal-overlay.active {
@@ -336,48 +366,90 @@
       opacity: 1;
     }
 
-    .modal-overlay.active .modal-content {
-      transform: translateY(0);
+    .modal-card {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+      transform: scale(0.95);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .modal-content h3 {
-      color: #fff;
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-title {
       font-size: 1.4rem;
-      margin-bottom: 15px;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
+      color: #fff;
     }
 
-    .conversion-rate {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 12px;
-      border-radius: 8px;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      margin-bottom: 20px;
-      border: 1px dashed #475569;
-    }
-
-    .usd-amount {
-      font-size: 2.8rem;
+    .wallet-balance {
+      font-size: 3rem;
       font-weight: 800;
       color: var(--success);
-      margin: 10px 0;
-      text-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+      margin: 10px 0 5px;
+      text-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+    }
+
+    .wallet-subtext {
+      color: var(--warning);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .rate-badge {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed var(--border-color);
+      padding: 10px;
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* History Log inside Modal */
+    .history-list {
+      max-height: 200px;
+      overflow-y: auto;
+      text-align: left;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-item {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--border-color);
     }
 
     .close-modal-btn {
       background: #334155;
       color: #fff;
       border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
+      padding: 12px;
+      border-radius: 10px;
       font-weight: 600;
-      cursor: pointer;
-      margin-top: 15px;
       width: 100%;
+      cursor: pointer;
       transition: background 0.2s;
     }
 
@@ -385,186 +457,220 @@
       background: #475569;
     }
 
-    @media (max-width: 600px) {
-      .form-grid, .checkbox-container {
+    @media (max-width: 650px) {
+      .form-grid, .options-row {
         grid-template-columns: 1fr;
       }
-      .token-counter {
+      .top-nav {
         top: 15px;
         right: 15px;
-        font-size: 0.9rem;
-        padding: 8px 14px;
       }
       .container {
-        padding: 2rem 1.5rem;
-        margin-top: 60px;
+        padding: 1.5rem;
+        margin-top: 50px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Contador de Tokens -->
-  <div class="token-counter" id="tokenBtn" title="Ver billetera">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="10"></circle>
-      <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
-      <path d="M12 18V6"></path>
-    </svg>
-    <span id="tokenValue">0 Tokens</span>
+  <!-- Top Right Interactive Pills -->
+  <div class="top-nav">
+    <button class="pill-btn wallet" id="walletBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span id="navTokenCount">1 Token ($0.02)</span>
+    </button>
+    <button class="pill-btn" id="historyBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Historial
+    </button>
   </div>
 
-  <!-- Modal Billetera -->
+  <!-- Wallet Modal -->
   <div class="modal-overlay" id="walletModal">
-    <div class="modal-content">
-      <h3>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warning-gold)" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4H6a2 2 0 0 1-2-2V6Z"/></svg>
-        Billetera Virtual
-      </h3>
-      <div class="conversion-rate">
-        <strong>Tasa de cambio:</strong><br>5 Tokens = $0.02 USD
+    <div class="modal-card">
+      <div class="modal-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4H6a2 2 0 0 1-2-2V6Z"/></svg>
+        Billetera Nexus
       </div>
-      <p style="color: var(--text-muted); font-size: 0.85rem;">Saldo Disponible:</p>
-      <div class="usd-amount" id="usdValue">$0.00</div>
-      <p id="modalTokenCount" style="color: var(--warning-gold); font-weight: 600;">0 Tokens acumulados</p>
-      
-      <button class="close-modal-btn" id="closeModalBtn">Cerrar Panel</button>
+      <div class="rate-badge">
+        <strong>Tasa Oficial:</strong> Cada 1 Token = $0.02 USD
+      </div>
+      <div class="wallet-balance" id="modalUsdVal">$0.02</div>
+      <div class="wallet-subtext" id="modalTokenVal">1 Token Acumulado</div>
+      <button class="close-modal-btn" onclick="toggleModal('walletModal', false)">Cerrar Billetera</button>
     </div>
   </div>
 
+  <!-- History Modal -->
+  <div class="modal-overlay" id="historyModal">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Registro de Envíos
+      </div>
+      <div class="history-list" id="historyListContainer">
+        <div style="color: var(--text-muted); text-align: center; padding: 1.5rem; font-size: 0.85rem;">No hay entregas registradas todavía.</div>
+      </div>
+      <button class="close-modal-btn" onclick="toggleModal('historyModal', false)">Cerrar Registro</button>
+    </div>
+  </div>
+
+  <!-- Main Application Card -->
   <div class="container">
     <div class="header">
-      <h2>Portal de Entregas</h2>
-      <p>Sube y clasifica tus archivos de forma segura</p>
+      <h1>Portal de Entregas ZIP</h1>
+      <p>Sube tus archivos comprimidos de forma segura al sistema de recompensas</p>
     </div>
 
-    <!-- Advertencia -->
-    <div class="warning-box">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
-        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-        <line x1="12" y1="9" x2="12" y2="13"></line>
-        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-      </svg>
-      <p><strong>⚠️ ADVERTENCIA:</strong> Enviar archivos ZIP incorrectos, falsos o maliciosos resultará en una penalización automática de <strong>-10 tokens</strong>.</p>
+    <!-- Security Warning Banner -->
+    <div class="warning-banner">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <p><strong>ADVERTENCIA DE SEGURIDAD:</strong> Enviar archivos ZIP incorrectos, vacíos, falsos o maliciosos activará el sistema antitrampas y descontará automáticamente <strong>-10 tokens</strong> de tu balance.</p>
     </div>
 
     <form id="uploadForm">
       
-      <!-- Fila 1: Usuario e ID -->
+      <!-- Discord Credentials Grid -->
       <div class="form-grid">
-        <div>
+        <div class="form-group" style="margin-bottom:0;">
           <label for="username">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             Nombre en Discord
           </label>
           <input type="text" id="username" placeholder="Ej: iker_dev" required autocomplete="off">
         </div>
-        <div>
+        <div class="form-group" style="margin-bottom:0;">
           <label for="discordId">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M16 2v4M8 2v4m-5 4h18"/></svg>
             ID Discord (Opcional)
           </label>
-          <input type="text" id="discordId" placeholder="Ej: 123456789012345678" autocomplete="off">
+          <input type="text" id="discordId" placeholder="Ej: 1234567890123" autocomplete="off">
         </div>
       </div>
 
-      <!-- Fila 2: Categoría y Notas -->
-      <div class="form-group">
+      <!-- File Category Selection -->
+      <div class="form-group" style="margin-top: 1.25rem;">
         <label for="category">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-          Categoría del Archivo
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Categoría del Proyecto
         </label>
         <select id="category" required>
-          <option value="" disabled selected>Selecciona una opción...</option>
-          <option value="Script / Código">Script / Código</option>
-          <option value="Interfaz Gráfica (UI)">Interfaz Gráfica (UI)</option>
-          <option value="Configuración / JSON">Configuración / JSON</option>
-          <option value="Actualización / Parche">Actualización / Parche</option>
-          <option value="Otro">Otro</option>
+          <option value="" disabled selected>Selecciona una categoría técnica...</option>
+          <option value="Script / Código Fuente">Script / Código Fuente (.lua / .js / .cs)</option>
+          <option value="Interfaz Gráfica / UI">Interfaz Gráfica / UI Design</option>
+          <option value="Configuración / Database">Configuración o Archivos JSON</option>
+          <option value="Actualización / Parche">Actualización del Sistema</option>
+          <option value="Otro Recurso">Otro Recurso General</option>
         </select>
       </div>
 
+      <!-- Developer Notes -->
       <div class="form-group">
         <label for="notes">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          Notas del desarrollador (Opcional)
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+          Notas para la Administración (Opcional)
         </label>
-        <textarea id="notes" rows="2" placeholder="Describe brevemente el contenido..."></textarea>
+        <textarea id="notes" rows="2" placeholder="Describe brevemente los cambios incluidos en el ZIP..."></textarea>
       </div>
 
-      <!-- Subida de archivo -->
+      <!-- Drag and Drop Zone -->
       <div class="form-group">
-        <label>Archivo (.zip)</label>
-        <div class="file-upload-wrapper" id="dropZone">
+        <label>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Archivo Comprimido (.zip obligatorio)
+        </label>
+        <div class="drop-zone" id="dropZone">
           <input type="file" id="zipFile" accept=".zip" required>
-          <div class="file-upload-text" id="fileText">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            Clic o arrastra tu archivo .zip aquí
+          <div class="drop-zone-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           </div>
-          <div class="file-name-display" id="fileNameDisplay"></div>
+          <div class="drop-zone-text" id="dropText">
+            Arrastra tu archivo ZIP aquí o <strong>haz clic para examinar</strong>
+          </div>
+          <div class="file-name" id="fileNameDisplay"></div>
         </div>
       </div>
 
-      <!-- Checkboxes -->
-      <div class="checkbox-container">
-        <div class="checkbox-group">
+      <!-- Options Row -->
+      <div class="options-row">
+        <label class="checkbox-wrapper">
           <input type="checkbox" id="urgentCheck">
-          <label for="urgentCheck">Prioridad URGENTE</label>
-        </div>
-        <div class="checkbox-group">
+          <span>Prioridad URGENTE</span>
+        </label>
+        <label class="checkbox-wrapper">
           <input type="checkbox" id="privateCheck">
-          <label for="privateCheck">Envío Confidencial</label>
-        </div>
+          <span>Envío Confidencial</span>
+        </label>
       </div>
 
-      <!-- Botón de Envío (Icono perfectamente centrado) -->
+      <!-- Action Button -->
       <button type="submit" id="submitBtn" class="submit-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        <span>Entregar Archivo</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <span>Entregar y Obtener 1 Token</span>
       </button>
+
     </form>
 
-    <div id="statusMessage" class="status"></div>
+    <div id="statusMessage" class="status-box"></div>
   </div>
 
   <script>
     const WEBHOOK_URL = "https://discord.com/api/webhooks/1543795264475897966/qjOKGpTG010S9Brmd1HLFNXjenDDWRp7iccuuELCGM07IQhk_sMPZUYgcR8CvH4AMeqe";
+    
+    // State management via localStorage
+    let userTokens = parseInt(localStorage.getItem('nexus_tokens')) || 1;
+    let deliveryHistory = JSON.parse(localStorage.getItem('nexus_history')) || [];
+    
+    updateUI();
+
+    // DOM Elements
     const form = document.getElementById('uploadForm');
-    const statusDiv = document.getElementById('statusMessage');
     const submitBtn = document.getElementById('submitBtn');
+    const statusMsg = document.getElementById('statusMessage');
     const fileInput = document.getElementById('zipFile');
-    const fileText = document.getElementById('fileText');
+    const dropText = document.getElementById('dropText');
     const fileNameDisplay = document.getElementById('fileNameDisplay');
     
-    // Modal & Billetera
-    const tokenBtn = document.getElementById('tokenBtn');
-    const walletModal = document.getElementById('walletModal');
-    const closeModalBtn = document.getElementById('closeModalBtn');
-    const tokenValueSpan = document.getElementById('tokenValue');
-    const usdValueDisplay = document.getElementById('usdValue');
-    const modalTokenCount = document.getElementById('modalTokenCount');
+    const walletBtn = document.getElementById('walletBtn');
+    const historyBtn = document.getElementById('historyBtn');
 
-    let userTokens = parseInt(localStorage.getItem('userTokens')) || 0;
-    updateTokenUI();
-
-    tokenBtn.addEventListener('click', () => walletModal.classList.add('active'));
-    closeModalBtn.addEventListener('click', () => walletModal.classList.remove('active'));
-    walletModal.addEventListener('click', (e) => {
-      if(e.target === walletModal) walletModal.classList.remove('active');
+    // Event Listeners for Modals
+    walletBtn.addEventListener('click', () => toggleModal('walletModal', true));
+    historyBtn.addEventListener('click', () => {
+      renderHistory();
+      toggleModal('historyModal', true);
     });
 
-    // Archivo UI
+    function toggleModal(modalId, show) {
+      const modal = document.getElementById(modalId);
+      if (show) {
+        modal.classList.add('active');
+      } else {
+        modal.classList.remove('active');
+      }
+    }
+
+    // Close on backdrop click
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        e.target.classList.remove('active');
+      }
+    });
+
+    // File selection UI feedback
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
-        fileText.style.display = 'none';
-        fileNameDisplay.textContent = file.name;
+        dropText.style.display = 'none';
+        fileNameDisplay.textContent = `📦 ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
       } else {
-        fileText.style.display = 'flex';
+        dropText.style.display = 'block';
         fileNameDisplay.textContent = '';
       }
     });
 
+    // Form submission handler
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -577,28 +683,28 @@
       const file = fileInput.files[0];
 
       if (!file || !file.name.toLowerCase().endsWith('.zip')) {
-        showStatus('Formato no válido. Solo se permiten archivos .zip', 'error');
+        showStatus('Error: Debes adjuntar obligatoriamente un archivo con extensión .zip válido.', 'error');
         return;
       }
 
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> <span>Procesando...</span>';
-      statusDiv.style.display = 'none';
+      submitBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="fa-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> <span>Enviando al sistema...</span>`;
+      statusMsg.style.display = 'none';
 
-      // Construcción del mensaje Discord
-      let discordMessage = `**📦 Nueva Entrega Registrada**\n`;
-      if (isUrgent) discordMessage = `🚨 **[PRIORIDAD ALTA]** 🚨\n` + discordMessage;
-      if (isPrivate) discordMessage = `🔒 **[CONFIDENCIAL]**\n` + discordMessage;
-      
-      discordMessage += `**👤 Usuario:** \`${username}\`\n`;
-      if (discordId) discordMessage += `**🆔 ID Discord:** <@${discordId}>\n`;
-      discordMessage += `**📁 Categoría:** ${category}\n`;
-      
-      if (notes) discordMessage += `**📝 Notas:** ${notes}`;
+      // Construct Discord Payload
+      let messageContent = `**📦 NUEVA ENTREGA DE ARCHIVO ZIP**\n`;
+      if (isUrgent) messageContent = `🚨 **[PRIORIDAD ALTA]** 🚨\n` + messageContent;
+      if (isPrivate) messageContent = `🔒 **[ENVÍO CONFIDENCIAL]**\n` + messageContent;
+
+      messageContent += `👤 **Usuario:** \`${username}\`\n`;
+      if (discordId) messageContent += `🆔 **ID:** <@${discordId}>\n`;
+      messageContent += `📁 **Categoría:** ${category}\n`;
+      if (notes) messageContent += `📝 **Notas:** ${notes}\n`;
+      messageContent += `🪙 **Recompensa:** +1 Token otorgado`;
 
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('content', discordMessage);
+      formData.append('content', messageContent);
 
       try {
         const response = await fetch(WEBHOOK_URL, {
@@ -607,39 +713,69 @@
         });
 
         if (response.ok) {
-          userTokens += 5;
-          localStorage.setItem('userTokens', userTokens);
-          updateTokenUI();
-          
-          showStatus('✔ Has obtenido +5 tokens para cambiarlos por dinero. Reclama tus tokens con el CEO.', 'success');
-          
+          // Grant +1 token per delivery
+          userTokens += 1;
+          saveState();
+          updateUI();
+
+          // Record history log
+          deliveryHistory.unshift({
+            file: file.name,
+            category: category,
+            date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+          });
+          localStorage.setItem('nexus_history', JSON.stringify(deliveryHistory));
+
+          showStatus('✔ ¡Entrega exitosa! Has obtenido +1 token. Reclama tus tokens con el CEO.', 'success');
           form.reset();
-          fileText.style.display = 'flex';
+          dropText.style.display = 'block';
           fileNameDisplay.textContent = '';
         } else {
-          showStatus('Error al conectar con el servidor de Discord.', 'error');
+          showStatus('Error: El servidor de Discord rechazó la conexión del webhook.', 'error');
         }
       } catch (err) {
-        showStatus('Error de red. Verifica tu conexión e intenta de nuevo.', 'error');
+        showStatus('Error de red crítico. Comprueba tu conexión e intenta de nuevo.', 'error');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> <span>Entregar Archivo</span>';
+        submitBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> <span>Entregar y Obtener 1 Token</span>`;
       }
     });
 
-    function showStatus(message, type) {
-      statusDiv.innerHTML = message;
-      statusDiv.className = `status ${type}`;
-      statusDiv.style.display = 'block';
+    function showStatus(text, type) {
+      statusMsg.textContent = text;
+      statusMsg.className = `status-box ${type}`;
+      statusMsg.style.display = 'block';
     }
 
-    function updateTokenUI() {
-      tokenValueSpan.textContent = `${userTokens} Tokens`;
-      modalTokenCount.textContent = `${userTokens} Tokens acumulados`;
+    function saveState() {
+      localStorage.setItem('nexus_tokens', userTokens);
+    }
+
+    function updateUI() {
+      const usdValue = (userTokens * 0.02).toFixed(2);
+      document.getElementById('navTokenCount').textContent = `${userTokens} Token${userTokens === 1 ? '' : 's'} ($${usdValue})`;
+      document.getElementById('modalUsdVal').textContent = `$${usdValue} USD`;
+      document.getElementById('modalTokenVal').textContent = `${userTokens} Token${userTokens === 1 ? '' : 's'} Acumulado${userTokens === 1 ? '' : 's'}`;
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('historyListContainer');
+      if (deliveryHistory.length === 0) {
+        container.innerHTML = `<div style="color: var(--text-muted); text-align: center; padding: 1.5rem; font-size: 0.85rem;">No hay entregas registradas todavía.</div>`;
+        return;
+      }
       
-      // Matemática: 5 tokens = $0.02 USD -> 1 token = 0.004 USD
-      const usdTotal = (userTokens * 0.004).toFixed(2);
-      usdValueDisplay.textContent = `$${usdTotal} USD`;
+      container.innerHTML = deliveryHistory.map(item => `
+        <div class="history-item">
+          <div>
+            <div style="font-weight: 600; color: #fff;">${item.file}</div>
+            <div style="color: var(--text-muted); font-size: 0.75rem;">${item.category}</div>
+          </div>
+          <div style="color: var(--success); font-weight: 600; font-size: 0.75rem; text-align: right;">
+            +1 Token<br><span style="color: var(--text-muted); font-weight: 400;">${item.date}</span>
+          </div>
+        </div>
+      `).join('');
     }
   </script>
 </body>
