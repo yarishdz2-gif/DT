@@ -28,6 +28,11 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
+    /* Evitar que los iconos bloqueen los clics en los botones */
+    button svg, path {
+      pointer-events: none;
+    }
+
     body {
       background-color: var(--bg-deep);
       background-image: 
