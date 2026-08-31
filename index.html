@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QyrexApi | Portal Elite de Entregas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #030712;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent: #a855f7;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #fbbf24;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --input-bg: rgba(3, 7, 18, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Evitar que los iconos bloqueen los clics en los botones */
+    button svg, path {
+      pointer-events: none;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Welcome / Auth Gate Overlay (First Screen) */
+    .auth-gate-wrapper {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-deep);
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0px, transparent 60%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 1.5rem;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .auth-gate-wrapper.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .auth-gate-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-color);
+      border-radius: 28px;
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 460px;
+      text-align: center;
+      box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.8);
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .auth-gate-logo {
+      font-size: 2.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #818cf8, #c084fc, #e879f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .auth-gate-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.5;
+    }
+
+    .auth-gate-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .auth-gate-btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .auth-gate-btn.primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      border: none;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .auth-gate-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.6);
+    }
+
+    .auth-gate-btn.secondary {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .auth-gate-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* Top Navigation / Wallet & Admin Pills */
+    .top-nav {
+      position: absolute;
+      top: 25px;
+      right: 35px;
+      display: flex;
+      gap: 10px;
+      z-index: 50;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill-btn {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 9px 16px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .pill-btn:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(99, 102, 241, 0.25);
+    }
+
+    .pill-btn.wallet {
+      border-color: var(--warning);
+      color: var(--warning);
+    }
+
+    .pill-btn.wallet:hover {
+      box-shadow: 0 6px 25px rgba(251, 191, 36, 0.25);
+    }
+
+    .pill-btn.admin-pill {
+      border-color: var(--accent);
+      color: #e879f9;
+      display: none;
+    }
+
+    .pill-btn.admin-pill:hover {
+      box-shadow: 0 6px 25px rgba(168, 85, 247, 0.3);
+    }
+
+    /* Main Card Layout */
+    .container {
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 640px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+      position: relative;
+      z-index: 10;
+      animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      display: none;
+    }
+
+    .container.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #818cf8, #c084fc, #e879f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Warning Banner */
+    .warning-banner {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-left: 4px solid var(--danger);
+      padding: 14px 18px;
+      border-radius: 12px;
+      margin-bottom: 1.8rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .warning-banner svg {
+      color: var(--danger);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .warning-banner p {
+      color: #fca5a5;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .warning-banner strong {
+      color: #fff;
+    }
+
+    /* Form Styles */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #cbd5e1;
+      margin-bottom: 0.5rem;
+    }
+
+    label svg {
+      color: var(--primary);
+    }
+
+    input[type="text"], input[type="password"], select, textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background-color: var(--input-bg);
+      color: #fff;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      background-color: rgba(3, 7, 18, 0.9);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    }
+
+    select option {
+      background-color: #0f172a;
+      color: #fff;
+    }
+
+    /* Drop Zone */
+    .drop-zone {
+      position: relative;
+      border: 2px dashed rgba(148, 163, 184, 0.25);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      background: var(--input-bg);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .drop-zone:hover {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.04);
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .drop-zone-icon {
+      color: var(--primary);
+      background: rgba(99, 102, 241, 0.1);
+      padding: 12px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drop-zone-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .drop-zone-text strong {
+      color: var(--primary);
+    }
+
+    .file-name {
+      font-weight: 600;
+      color: var(--success);
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+
+    /* Options Panel (Checkboxes) */
+    .options-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper span {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #cbd5e1;
+    }
+
+    /* Submit Action Button */
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(99, 102, 241, 0.6);
+    }
+
+    .submit-btn:disabled {
+      background: #334155;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Status Notifications */
+    .status-box {
+      margin-top: 1.5rem;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-align: center;
+      display: none;
+      animation: popIn 0.3s ease;
+    }
+
+    .status-box.success {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--success);
+      color: #34d399;
+    }
+
+    .status-box.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--danger);
+      color: #f87171;
+    }
+
+    /* Modals Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.8);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-card {
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+      transform: scale(0.95);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: scale(1);
+    }
+
+    .modal-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #fff;
+    }
+
+    .wallet-balance {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--success);
+      margin: 10px 0 5px;
+      text-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+    }
+
+    .wallet-subtext {
+      color: var(--warning);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .rate-badge {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed var(--border-color);
+      padding: 10px;
+      border-radius: 10px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* History List inside Modal */
+    .history-list {
+      max-height: 200px;
+      overflow-y: auto;
+      text-align: left;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-item {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--border-color);
+    }
+
+    .close-modal-btn {
+      background: #334155;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .close-modal-btn:hover {
+      background: #475569;
+    }
+
+    /* Admin specific controls */
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    .admin-stat-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .admin-stat-num {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .admin-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    @media (max-width: 650px) {
+      .form-grid, .options-row {
+        grid-template-columns: 1fr;
+      }
+      .top-nav {
+        top: 15px;
+        right: 15px;
+      }
+      .container {
+        padding: 1.5rem;
+        margin-top: 60px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Initial Gate Screen (Register / Login Choice) -->
+  <div class="auth-gate-wrapper" id="authGate">
+    <div class="auth-gate-card">
+      <div class="auth-gate-logo">QyrexApi</div>
+      <div class="auth-gate-desc">Portal Elite de Entregas y Gestión de Tokens. Selecciona una opción para continuar.</div>
+      <div class="auth-gate-actions">
+        <button class="auth-gate-btn primary" id="gateLoginBtn" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Iniciar Sesión
+        </button>
+        <button class="auth-gate-btn secondary" id="gateRegisterBtn" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          Registrar Cuenta Nueva
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Right Interactive Pills (Visible after login) -->
+  <div class="top-nav" id="topNav" style="display: none;">
+    <button class="pill-btn wallet" id="walletBtn" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span id="navTokenCount">1 Token ($0.02)</span>
+    </button>
+    <button class="pill-btn" id="historyBtn" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Historial
+    </button>
+    <button class="pill-btn admin-pill" id="adminPillBtn" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l7 4v6c0 5.25-3.5 10.15-7 11.25C8.5 22.15 5 17.25 5 12V6l7-4z"/></svg>
+      Admin Panel
+    </button>
+    <button class="pill-btn" id="logoutNavBtn" type="button" style="border-color: var(--danger); color: #fca5a5;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span id="navUserLabel">Salir</span>
+    </button>
+  </div>
+
+  <!-- Wallet Modal -->
+  <div class="modal-overlay" id="walletModal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4H6a2 2 0 0 1-2-2V6Z"/></svg>
+        Billetera QyrexApi
+      </div>
+      <div class="rate-badge">
+        <strong>Tasa Oficial:</strong> Cada 1 Token = $0.02 USD
+      </div>
+      <div class="wallet-balance" id="modalUsdVal">$0.02</div>
+      <div class="wallet-subtext" id="modalTokenVal">1 Token Acumulado</div>
+      <button class="close-modal-btn" type="button" id="closeWalletBtn">Cerrar Billetera</button>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div class="modal-overlay" id="historyModal">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Registro de Envíos
+      </div>
+      <div class="history-list" id="historyListContainer">
+        <div style="color: var(--text-muted); text-align: center; padding: 1.5rem; font-size: 0.85rem;">No hay entregas registradas todavía.</div>
+      </div>
+      <button class="close-modal-btn" type="button" id="closeHistoryBtn">Cerrar Registro</button>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal-overlay" id="registerModal">
+    <div class="modal-card" style="max-width: 380px;">
+      <div class="modal-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Registrar Cuenta
+      </div>
+      <form id="registerForm" style="text-align: left;">
+        <div class="form-group">
+          <label for="regUser">Nombre de Usuario</label>
+          <input type="text" id="regUser" placeholder="Elige un usuario..." required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="regPass">Contraseña</label>
+          <input type="password" id="regPass" placeholder="Elige una contraseña..." required>
+        </div>
+        <button type="submit" class="submit-btn" style="margin-top: 10px;">Crear Cuenta</button>
+      </form>
+      <button class="close-modal-btn" type="button" id="closeRegisterBtn" style="margin-top: 10px; background: transparent; color: var(--text-muted);">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-card" style="max-width: 380px;">
+      <div class="modal-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Iniciar Sesión
+      </div>
+      <form id="loginForm" style="text-align: left;">
+        <div class="form-group">
+          <label for="loginUser">Usuario (ej: owner)</label>
+          <input type="text" id="loginUser" placeholder="Tu usuario..." required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="loginPass">Contraseña</label>
+          <input type="password" id="loginPass" placeholder="Tu contraseña..." required>
+        </div>
+        <button type="submit" class="submit-btn" style="margin-top: 10px;">Entrar</button>
+      </form>
+      <button class="close-modal-btn" type="button" id="closeLoginBtn" style="margin-top: 10px; background: transparent; color: var(--text-muted);">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Admin Panel Modal -->
+  <div class="modal-overlay" id="adminModal">
+    <div class="modal-card" style="max-width: 500px;">
+      <div class="modal-title" style="color: #e879f9;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l7 4v6c0 5.25-3.5 10.15-7 11.25C8.5 22.15 5 17.25 5 12V6l7-4z"/></svg>
+        QyrexApi - Admin Panel
+      </div>
+      <div class="admin-stats-grid">
+        <div class="admin-stat-box">
+          <div class="admin-stat-num" id="adminTotalDeliveries">0</div>
+          <div class="admin-stat-label">Entregas Totales</div>
+        </div>
+        <div class="admin-stat-box">
+          <div class="admin-stat-num" id="adminTotalTokens">1</div>
+          <div class="admin-stat-label">Tokens en Sistema</div>
+        </div>
+      </div>
+      <div style="text-align: left; margin-bottom: 15px; font-size: 0.85rem; color: var(--text-muted);">
+        <strong>Herramientas de Propietario (Owner):</strong>
+      </div>
+      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <button class="close-modal-btn" type="button" id="clearHistoryBtn" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid var(--danger);">Borrar Historial</button>
+        <button class="close-modal-btn" type="button" id="adminLogoutBtn" style="background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid var(--primary);">Cerrar Sesión</button>
+      </div>
+      <button class="close-modal-btn" type="button" id="closeAdminBtn">Cerrar Panel Admin</button>
+    </div>
+  </div>
+
+  <!-- Main Application Card -->
+  <div class="container" id="mainContainer">
+    <div class="header">
+      <h1>QyrexApi | Entregas ZIP</h1>
+      <p>Sube tus archivos comprimidos al sistema centralizado de QyrexApi</p>
+    </div>
+
+    <!-- Security Warning Banner -->
+    <div class="warning-banner">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <p><strong>ADVERTENCIA DE SEGURIDAD:</strong> Enviar archivos ZIP incorrectos, vacíos, falsos o maliciosos activará el sistema antitrampas y descontará automáticamente <strong>-10 tokens</strong> de tu balance.</p>
+    </div>
+
+    <form id="uploadForm">
+      
+      <!-- Discord Credentials Grid -->
+      <div class="form-grid">
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="username">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Nombre en Discord
+          </label>
+          <input type="text" id="username" placeholder="Ej: iker_dev" required autocomplete="off">
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="discordId">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M16 2v4M8 2v4m-5 4h18"/></svg>
+            ID Discord (Opcional)
+          </label>
+          <input type="text" id="discordId" placeholder="Ej: 1234567890123" autocomplete="off">
+        </div>
+      </div>
+
+      <!-- File Category Selection -->
+      <div class="form-group" style="margin-top: 1.25rem;">
+        <label for="category">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Categoría del Proyecto
+        </label>
+        <select id="category" required>
+          <option value="" disabled selected>Selecciona una categoría técnica...</option>
+          <option value="Script / Código Fuente">Script / Código Fuente (.lua / .js / .cs)</option>
+          <option value="Interfaz Gráfica / UI">Interfaz Gráfica / UI Design</option>
+          <option value="Configuración / Database">Configuración o Archivos JSON</option>
+          <option value="Actualización / Parche">Actualización del Sistema</option>
+          <option value="Otro Recurso">Otro Recurso General</option>
+        </select>
+      </div>
+
+      <!-- Developer Notes -->
+      <div class="form-group">
+        <label for="notes">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+          Notas para la Administración (Opcional)
+        </label>
+        <textarea id="notes" rows="2" placeholder="Describe brevemente los cambios incluidos en el ZIP..."></textarea>
+      </div>
+
+      <!-- Drag and Drop Zone -->
+      <div class="form-group">
+        <label>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Archivo Comprimido (.zip obligatorio)
+        </label>
+        <div class="drop-zone" id="dropZone">
+          <input type="file" id="zipFile" accept=".zip" required>
+          <div class="drop-zone-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="drop-zone-text" id="dropText">
+            Arrastra tu archivo ZIP aquí o <strong>haz clic para examinar</strong>
+          </div>
+          <div class="file-name" id="fileNameDisplay"></div>
+        </div>
+      </div>
+
+      <!-- Options Row -->
+      <div class="options-row">
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="urgentCheck">
+          <span>Prioridad URGENTE</span>
+        </label>
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="privateCheck">
+          <span>Envío Confidencial</span>
+        </label>
+      </div>
+
+      <!-- Action Button -->
+      <button type="submit" id="submitBtn" class="submit-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <span>Entregar y Obtener 1 Token</span>
+      </button>
+
+    </form>
+
+    <div id="statusMessage" class="status-box"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const WEBHOOK_URL = "https://discord.com/api/webhooks/1543795264475897966/qjOKGpTG010S9Brmd1HLFNXjenDDWRp7iccuuELCGM07IQhk_sMPZUYgcR8CvH4AMeqe";
+      
+      // State management via localStorage
+      let userTokens = parseInt(localStorage.getItem('qyrex_tokens')) || 1;
+      let deliveryHistory = JSON.parse(localStorage.getItem('qyrex_history')) || [];
+      let registeredUsers = JSON.parse(localStorage.getItem('qyrex_users')) || [{username: 'owner', password: 'password123'}];
+      let currentUser = localStorage.getItem('qyrex_current_user') || null;
+      
+      updateUI();
+      checkAuthStatus();
+
+      // DOM Elements
+      const authGate = document.getElementById('authGate');
+      const mainContainer = document.getElementById('mainContainer');
+      const topNav = document.getElementById('topNav');
+
+      const gateLoginBtn = document.getElementById('gateLoginBtn');
+      const gateRegisterBtn = document.getElementById('gateRegisterBtn');
+
+      const form = document.getElementById('uploadForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const statusMsg = document.getElementById('statusMessage');
+      const fileInput = document.getElementById('zipFile');
+      const dropText = document.getElementById('dropText');
+      const fileNameDisplay = document.getElementById('fileNameDisplay');
+      
+      const walletBtn = document.getElementById('walletBtn');
+      const historyBtn = document.getElementById('historyBtn');
+      const adminPillBtn = document.getElementById('adminPillBtn');
+      const logoutNavBtn = document.getElementById('logoutNavBtn');
+      
+      const registerForm = document.getElementById('registerForm');
+      const loginForm = document.getElementById('loginForm');
+
+      // Gate buttons action
+      if (gateLoginBtn) gateLoginBtn.addEventListener('click', () => toggleModal('loginModal', true));
+      if (gateRegisterBtn) gateRegisterBtn.addEventListener('click', () => toggleModal('registerModal', true));
+
+      // Close buttons for modals
+      const closeRegisterBtn = document.getElementById('closeRegisterBtn');
+      if (closeRegisterBtn) closeRegisterBtn.addEventListener('click', () => toggleModal('registerModal', false));
+
+      const closeLoginBtn = document.getElementById('closeLoginBtn');
+      if (closeLoginBtn) closeLoginBtn.addEventListener('click', () => toggleModal('loginModal', false));
+
+      const closeWalletBtn = document.getElementById('closeWalletBtn');
+      if (closeWalletBtn) closeWalletBtn.addEventListener('click', () => toggleModal('walletModal', false));
+
+      const closeHistoryBtn = document.getElementById('closeHistoryBtn');
+      if (closeHistoryBtn) closeHistoryBtn.addEventListener('click', () => toggleModal('historyModal', false));
+
+      const closeAdminBtn = document.getElementById('closeAdminBtn');
+      if (closeAdminBtn) closeAdminBtn.addEventListener('click', () => toggleModal('adminModal', false));
+
+      // Event Listeners for Modals
+      if (walletBtn) walletBtn.addEventListener('click', () => toggleModal('walletModal', true));
+      if (historyBtn) historyBtn.addEventListener('click', () => {
+        renderHistory();
+        toggleModal('historyModal', true);
+      });
+
+      if (adminPillBtn) adminPillBtn.addEventListener('click', () => {
+        updateAdminStats();
+        toggleModal('adminModal', true);
+      });
+
+      if (logoutNavBtn) logoutNavBtn.addEventListener('click', logoutUser);
+
+      const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+      if (adminLogoutBtn) adminLogoutBtn.addEventListener('click', logoutUser);
+
+      const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+      if (clearHistoryBtn) clearHistoryBtn.addEventListener('click', clearSystemHistory);
+
+      // Register Handler
+      if (registerForm) {
+        registerForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const u = document.getElementById('regUser').value.trim();
+          const p = document.getElementById('regPass').value.trim();
+
+          if (registeredUsers.some(user => user.username.toLowerCase() === u.toLowerCase())) {
+            alert('El nombre de usuario ya existe. Elige otro.');
+            return;
+          }
+
+          registeredUsers.push({ username: u, password: p });
+          localStorage.setItem('qyrex_users', JSON.stringify(registeredUsers));
+          
+          currentUser = u;
+          localStorage.setItem('qyrex_current_user', currentUser);
+          
+          toggleModal('registerModal', false);
+          registerForm.reset();
+          checkAuthStatus();
+        });
+      }
+
+      // Login Handler
+      if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const u = document.getElementById('loginUser').value.trim();
+          const p = document.getElementById('loginPass').value.trim();
+
+          const foundUser = registeredUsers.find(user => user.username.toLowerCase() === u.toLowerCase() && user.password === p);
+
+          if (foundUser) {
+            currentUser = foundUser.username;
+            localStorage.setItem('qyrex_current_user', currentUser);
+            checkAuthStatus();
+            toggleModal('loginModal', false);
+            loginForm.reset();
+          } else {
+            alert('Usuario o contraseña incorrectos.');
+          }
+        });
+      }
+
+      function checkAuthStatus() {
+        if (currentUser) {
+          if (authGate) authGate.classList.add('hidden');
+          if (mainContainer) mainContainer.classList.add('active');
+          if (topNav) topNav.style.display = 'flex';
+          const navUserLabel = document.getElementById('navUserLabel');
+          if (navUserLabel) navUserLabel.textContent = currentUser;
+
+          if (currentUser.toLowerCase() === 'owner') {
+            if (adminPillBtn) adminPillBtn.style.display = 'flex';
+          } else {
+            if (adminPillBtn) adminPillBtn.style.display = 'none';
+          }
+        } else {
+          if (authGate) authGate.classList.remove('hidden');
+          if (mainContainer) mainContainer.classList.remove('active');
+          if (topNav) topNav.style.display = 'none';
+        }
+      }
+
+      function logoutUser() {
+        currentUser = null;
+        localStorage.removeItem('qyrex_current_user');
+        checkAuthStatus();
+        toggleModal('adminModal', false);
+      }
+
+      function clearSystemHistory() {
+        if (confirm('¿Estás seguro de vaciar todo el registro de entregas?')) {
+          deliveryHistory = [];
+          localStorage.removeItem('qyrex_history');
+          updateAdminStats();
+          renderHistory();
+          alert('Historial borrado con éxito.');
+        }
+      }
+
+      function updateAdminStats() {
+        const adminTotalDeliveries = document.getElementById('adminTotalDeliveries');
+        const adminTotalTokens = document.getElementById('adminTotalTokens');
+        if (adminTotalDeliveries) adminTotalDeliveries.textContent = deliveryHistory.length;
+        if (adminTotalTokens) adminTotalTokens.textContent = userTokens;
+      }
+
+      function toggleModal(modalId, show) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+        if (show) {
+          modal.classList.add('active');
+          if (modalId === 'adminModal') updateAdminStats();
+        } else {
+          modal.classList.remove('active');
+        }
+      }
+
+      // Close on backdrop click
+      window.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-overlay')) {
+          e.target.classList.remove('active');
+        }
+      });
+
+      // File selection UI feedback
+      if (fileInput) {
+        fileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            if (dropText) dropText.style.display = 'none';
+            if (fileNameDisplay) fileNameDisplay.textContent = `📦 ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+          } else {
+            if (dropText) dropText.style.display = 'block';
+            if (fileNameDisplay) fileNameDisplay.textContent = '';
+          }
+        });
+      }
+
+      // Form submission handler
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const username = document.getElementById('username').value.trim();
+          const discordId = document.getElementById('discordId').value.trim();
+          const category = document.getElementById('category').value;
+          const notes = document.getElementById('notes').value.trim();
+          const isUrgent = document.getElementById('urgentCheck').checked;
+          const isPrivate = document.getElementById('privateCheck').checked;
+          const file = fileInput.files[0];
+
+          if (!file || !file.name.toLowerCase().endsWith('.zip')) {
+            showStatus('Error: Debes adjuntar obligatoriamente un archivo con extensión .zip válido.', 'error');
+            return;
+          }
+
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="fa-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> <span>Enviando al sistema QyrexApi...</span>`;
+          statusMsg.style.display = 'none';
+
+          let messageContent = `**📦 NUEVA ENTREGA DE ARCHIVO ZIP [QYREXAPI]**\n`;
+          if (isUrgent) messageContent = `🚨 **[PRIORIDAD ALTA]** 🚨\n` + messageContent;
+          if (isPrivate) messageContent = `🔒 **[ENVÍO CONFIDENCIAL]**\n` + messageContent;
+
+          messageContent += `👤 **Usuario:** \`${username}\`\n`;
+          if (discordId) messageContent += `🆔 **ID:** <@${discordId}>\n`;
+          messageContent += `📁 **Categoría:** ${category}\n`;
+          if (notes) messageContent += `📝 **Notas:** ${notes}\n`;
+          messageContent += `🪙 **Recompensa:** +1 Token otorgado`;
+
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('content', messageContent);
+
+          try {
+            const response = await fetch(WEBHOOK_URL, {
+              method: 'POST',
+              body: formData
+            });
+
+            if (response.ok) {
+              userTokens += 1;
+              saveState();
+              updateUI();
+
+              deliveryHistory.unshift({
+                file: file.name,
+                category: category,
+                date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+              });
+              localStorage.setItem('qyrex_history', JSON.stringify(deliveryHistory));
+
+              showStatus('✔ ¡Entrega exitosa en QyrexApi! Has obtenido +1 token. Reclama tus tokens con el CEO.', 'success');
+              form.reset();
+              if (dropText) dropText.style.display = 'block';
+              if (fileNameDisplay) fileNameDisplay.textContent = '';
+            } else {
+              showStatus('Error: El servidor de Discord rechazó la conexión del webhook.', 'error');
+            }
+          } catch (err) {
+            showStatus('Error de red crítico. Comprueba tu conexión e intenta de nuevo.', 'error');
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> <span>Entregar y Obtener 1 Token</span>`;
+          }
+        });
+      }
+
+      function showStatus(text, type) {
+        if (!statusMsg) return;
+        statusMsg.textContent = text;
+        statusMsg.className = `status-box ${type}`;
+        statusMsg.style.display = 'block';
+      }
+
+      function saveState() {
+        localStorage.setItem('qyrex_tokens', userTokens);
+      }
+
+      function updateUI() {
+        const usdValue = (userTokens * 0.02).toFixed(2);
+        const navTokenCount = document.getElementById('navTokenCount');
+        const modalUsdVal = document.getElementById('modalUsdVal');
+        const modalTokenVal = document.getElementById('modalTokenVal');
+
+        if (navTokenCount) navTokenCount.textContent = `${userTokens} Token${userTokens === 1 ? '' : 's'} ($${usdValue})`;
+        if (modalUsdVal) modalUsdVal.textContent = `$${usdValue} USD`;
+        if (modalTokenVal) modalTokenVal.textContent = `${userTokens} Token${userTokens === 1 ? '' : 's'} Acumulado${userTokens === 1 ? '' : 's'}`;
+      }
+
+      function renderHistory() {
+        const container = document.getElementById('historyListContainer');
+        if (!container) return;
+        if (deliveryHistory.length === 0) {
+          container.innerHTML = `<div style="color: var(--text-muted); text-align: center; padding: 1.5rem; font-size: 0.85rem;">No hay entregas registradas todavía.</div>`;
+          return;
+        }
+        
+        container.innerHTML = deliveryHistory.map(item => `
+          <div class="history-item">
+            <div>
+              <div style="font-weight: 600; color: #fff;">${item.file}</div>
+              <div style="color: var(--text-muted); font-size: 0.75rem;">${item.category}</div>
+            </div>
+            <div style="color: var(--success); font-weight: 600; font-size: 0.75rem; text-align: right;">
+              +1 Token<br><span style="color: var(--text-muted); font-weight: 400;">${item.date}</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    });
+  </script>
+</body>
+</html>
