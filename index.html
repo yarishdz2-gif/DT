@@ -49,8 +49,10 @@
       top: 25px;
       right: 35px;
       display: flex;
-      gap: 12px;
+      gap: 10px;
       z-index: 50;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .pill-btn {
@@ -58,10 +60,10 @@
       backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 10px 18px;
+      padding: 9px 16px;
       border-radius: 50px;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -88,7 +90,7 @@
     .pill-btn.admin-pill {
       border-color: var(--accent);
       color: #e879f9;
-      display: none; /* Oculto por defecto hasta autenticarse como owner */
+      display: none;
     }
 
     .pill-btn.admin-pill:hover {
@@ -505,7 +507,7 @@
       }
       .container {
         padding: 1.5rem;
-        margin-top: 50px;
+        margin-top: 60px;
       }
     }
   </style>
@@ -526,9 +528,13 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l7 4v6c0 5.25-3.5 10.15-7 11.25C8.5 22.15 5 17.25 5 12V6l7-4z"/></svg>
       Admin Panel
     </button>
+    <button class="pill-btn" id="registerBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+      Registrar
+    </button>
     <button class="pill-btn" id="loginBtn" style="border-color: var(--primary);">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-      <span id="loginBtnText">Login (Owner)</span>
+      <span id="loginBtnText">Login</span>
     </button>
   </div>
 
@@ -562,19 +568,45 @@
     </div>
   </div>
 
+  <!-- Register Modal -->
+  <div class="modal-overlay" id="registerModal">
+    <div class="modal-card" style="max-width: 380px;">
+      <div class="modal-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Registrar Cuenta
+      </div>
+      <form id="registerForm" style="text-align: left;">
+        <div class="form-group">
+          <label for="regUser">Nombre de Usuario</label>
+          <input type="text" id="regUser" placeholder="Elige un usuario..." required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="regPass">Contraseña</label>
+          <input type="password" id="regPass" placeholder="Elige una contraseña..." required>
+        </div>
+        <button type="submit" class="submit-btn" style="margin-top: 10px;">Crear Cuenta</button>
+      </form>
+      <button class="close-modal-btn" style="margin-top: 10px; background: transparent; color: var(--text-muted);" onclick="toggleModal('registerModal', false)">Cancelar</button>
+    </div>
+  </div>
+
   <!-- Login Modal -->
   <div class="modal-overlay" id="loginModal">
     <div class="modal-card" style="max-width: 380px;">
       <div class="modal-title">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Acceso de Propietario
+        Iniciar Sesión
       </div>
-      <form id="ownerLoginForm" style="text-align: left;">
+      <form id="loginForm" style="text-align: left;">
         <div class="form-group">
-          <label for="loginUser">Usuario del Sistema</label>
-          <input type="text" id="loginUser" placeholder="Ingresa el usuario (owner)..." required autocomplete="off">
+          <label for="loginUser">Usuario</label>
+          <input type="text" id="loginUser" placeholder="Tu usuario (ej. owner)..." required autocomplete="off">
         </div>
-        <button type="submit" class="submit-btn" style="margin-top: 10px;">Verificar Identidad</button>
+        <div class="form-group">
+          <label for="loginPass">Contraseña</label>
+          <input type="password" id="loginPass" placeholder="Tu contraseña..." required>
+        </div>
+        <button type="submit" class="submit-btn" style="margin-top: 10px;">Entrar</button>
       </form>
       <button class="close-modal-btn" style="margin-top: 10px; background: transparent; color: var(--text-muted);" onclick="toggleModal('loginModal', false)">Cancelar</button>
     </div>
@@ -598,11 +630,11 @@
         </div>
       </div>
       <div style="text-align: left; margin-bottom: 15px; font-size: 0.85rem; color: var(--text-muted);">
-        <strong>Herramientas de Propietario:</strong>
+        <strong>Herramientas de Propietario (Owner):</strong>
       </div>
       <div style="display: flex; gap: 10px; margin-bottom: 20px;">
         <button class="close-modal-btn" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid var(--danger);" onclick="clearSystemHistory()">Borrar Historial</button>
-        <button class="close-modal-btn" style="background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid var(--primary);" onclick="logoutOwner()">Cerrar Sesión Admin</button>
+        <button class="close-modal-btn" style="background: rgba(99, 102, 241, 0.2); color: #818cf8; border: 1px solid var(--primary);" onclick="logoutUser()">Cerrar Sesión</button>
       </div>
       <button class="close-modal-btn" onclick="toggleModal('adminModal', false)">Cerrar Panel Admin</button>
     </div>
@@ -713,10 +745,11 @@
     // State management via localStorage
     let userTokens = parseInt(localStorage.getItem('qyrex_tokens')) || 1;
     let deliveryHistory = JSON.parse(localStorage.getItem('qyrex_history')) || [];
-    let isOwnerLoggedIn = localStorage.getItem('qyrex_is_owner') === 'true';
+    let registeredUsers = JSON.parse(localStorage.getItem('qyrex_users')) || [{username: 'owner', password: 'password123'}];
+    let currentUser = localStorage.getItem('qyrex_current_user') || null;
     
     updateUI();
-    checkOwnerStatus();
+    checkAuthStatus();
 
     // DOM Elements
     const form = document.getElementById('uploadForm');
@@ -728,9 +761,12 @@
     
     const walletBtn = document.getElementById('walletBtn');
     const historyBtn = document.getElementById('historyBtn');
+    const registerBtn = document.getElementById('registerBtn');
     const loginBtn = document.getElementById('loginBtn');
     const adminPillBtn = document.getElementById('adminPillBtn');
-    const ownerLoginForm = document.getElementById('ownerLoginForm');
+    
+    const registerForm = document.getElementById('registerForm');
+    const loginForm = document.getElementById('loginForm');
 
     // Event Listeners for Modals
     walletBtn.addEventListener('click', () => toggleModal('walletModal', true));
@@ -739,9 +775,15 @@
       toggleModal('historyModal', true);
     });
     
+    registerBtn.addEventListener('click', () => toggleModal('registerModal', true));
+    
     loginBtn.addEventListener('click', () => {
-      if (isOwnerLoggedIn) {
-        toggleModal('adminModal', true);
+      if (currentUser) {
+        if (currentUser.toLowerCase() === 'owner') {
+          toggleModal('adminModal', true);
+        } else {
+          alert(`Sesión activa como: ${currentUser}. No tienes privilegios de owner.`);
+        }
       } else {
         toggleModal('loginModal', true);
       }
@@ -752,37 +794,70 @@
       toggleModal('adminModal', true);
     });
 
-    ownerLoginForm.addEventListener('submit', (e) => {
+    // Register Handler
+    registerForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const usernameInput = document.getElementById('loginUser').value.trim();
-      if (usernameInput.toLowerCase() === 'owner') {
-        isOwnerLoggedIn = true;
-        localStorage.setItem('qyrex_is_owner', 'true');
-        checkOwnerStatus();
+      const u = document.getElementById('regUser').value.trim();
+      const p = document.getElementById('regPass').value.trim();
+
+      if (registeredUsers.some(user => user.username.toLowerCase() === u.toLowerCase())) {
+        alert('El nombre de usuario ya existe. Elige otro.');
+        return;
+      }
+
+      registeredUsers.push({ username: u, password: p });
+      localStorage.setItem('qyrex_users', JSON.stringify(registeredUsers));
+      toggleModal('registerModal', false);
+      registerForm.reset();
+      showStatus(`✔ ¡Cuenta "${u}" registrada con éxito! Ya puedes iniciar sesión.`, 'success');
+    });
+
+    // Login Handler
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const u = document.getElementById('loginUser').value.trim();
+      const p = document.getElementById('loginPass').value.trim();
+
+      const foundUser = registeredUsers.find(user => user.username.toLowerCase() === u.toLowerCase() && user.password === p);
+
+      if (foundUser) {
+        currentUser = foundUser.username;
+        localStorage.setItem('qyrex_current_user', currentUser);
+        checkAuthStatus();
         toggleModal('loginModal', false);
-        document.getElementById('loginUser').value = '';
-        showStatus('✔ ¡Bienvenido, Owner! Acceso al Panel de Administración concedido.', 'success');
+        loginForm.reset();
+        showStatus(`✔ Sesión iniciada como "${currentUser}".`, 'success');
+        if (currentUser.toLowerCase() === 'owner') {
+          toggleModal('adminModal', true);
+        }
       } else {
-        alert('Usuario incorrecto. Solo el usuario "owner" tiene privilegios administrativos.');
+        alert('Usuario o contraseña incorrectos.');
       }
     });
 
-    function checkOwnerStatus() {
-      if (isOwnerLoggedIn) {
-        adminPillBtn.style.display = 'flex';
-        document.getElementById('loginBtnText').textContent = 'Panel Admin';
+    function checkAuthStatus() {
+      if (currentUser) {
+        registerBtn.style.display = 'none';
+        if (currentUser.toLowerCase() === 'owner') {
+          adminPillBtn.style.display = 'flex';
+          document.getElementById('loginBtnText').textContent = 'Panel Admin';
+        } else {
+          adminPillBtn.style.display = 'none';
+          document.getElementById('loginBtnText').textContent = currentUser;
+        }
       } else {
+        registerBtn.style.display = 'flex';
         adminPillBtn.style.display = 'none';
-        document.getElementById('loginBtnText').textContent = 'Login (Owner)';
+        document.getElementById('loginBtnText').textContent = 'Login';
       }
     }
 
-    function logoutOwner() {
-      isOwnerLoggedIn = false;
-      localStorage.removeItem('qyrex_is_owner');
-      checkOwnerStatus();
+    function logoutUser() {
+      currentUser = null;
+      localStorage.removeItem('qyrex_current_user');
+      checkAuthStatus();
       toggleModal('adminModal', false);
-      showStatus('Sesión de administrador cerrada correctamente.', 'success');
+      showStatus('Sesión cerrada correctamente.', 'success');
     }
 
     function clearSystemHistory() {
@@ -850,10 +925,9 @@
       submitBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="fa-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> <span>Enviando al sistema QyrexApi...</span>`;
       statusMsg.style.display = 'none';
 
-      // Construct Discord Payload
       let messageContent = `**📦 NUEVA ENTREGA DE ARCHIVO ZIP [QYREXAPI]**\n`;
       if (isUrgent) messageContent = `🚨 **[PRIORIDAD ALTA]** 🚨\n` + messageContent;
-      if (isPrivate) messageContent = `🔒 **[ENVÍO CONFIDENCIAL]**\n` + messageContent;
+      if (isPrivate) messageContent = `🔒 **[ENVÍO CONFIDENCAL]**\n` + messageContent;
 
       messageContent += `👤 **Usuario:** \`${username}\`\n`;
       if (discordId) messageContent += `🆔 **ID:** <@${discordId}>\n`;
@@ -872,12 +946,10 @@
         });
 
         if (response.ok) {
-          // Grant +1 token per delivery
           userTokens += 1;
           saveState();
           updateUI();
 
-          // Record history log
           deliveryHistory.unshift({
             file: file.name,
             category: category,
