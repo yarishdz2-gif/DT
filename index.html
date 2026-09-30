@@ -3,692 +3,168 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>QYREX Obfuscator</title>
-
+<title>QyrexObf</title>
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Segoe UI,Arial,sans-serif
-}
-
-body{
-    min-height:100vh;
-    background:
-        radial-gradient(circle at top,#06271d 0%,#090b0e 38%,#050507 100%);
-    color:#eafff6;
-    padding:30px 15px
-}
-
-.container{
-    width:100%;
-    max-width:1150px;
-    margin:auto
-}
-
-h1{
-    text-align:center;
-    color:#00ff9d;
-    font-size:34px;
-    margin-bottom:7px;
-    letter-spacing:.5px
-}
-
-.subtitle{
-    text-align:center;
-    color:#718078;
-    font-size:14px;
-    margin-bottom:28px
-}
-
-.panel{
-    background:rgba(11,15,14,.96);
-    border:1px solid #1d3b30;
-    border-radius:18px;
-    padding:20px;
-    margin-bottom:18px;
-    box-shadow:0 15px 45px rgba(0,0,0,.38)
-}
-
-.title{
-    color:#00ff9d;
-    font-size:14px;
-    font-weight:700;
-    margin-bottom:12px
-}
-
-label{
-    display:block;
-    color:#8c9e96;
-    font-size:12px;
-    margin-bottom:7px;
-    font-weight:600
-}
-
-input,
-textarea{
-    width:100%;
-    background:#080b0a;
-    border:1px solid #263c33;
-    border-radius:12px;
-    color:#74ffc9;
-    outline:none;
-    padding:14px;
-    font-size:13px
-}
-
-input:focus,
-textarea:focus{
-    border-color:#00ff9d
-}
-
-textarea{
-    min-height:230px;
-    resize:vertical;
-    line-height:1.5;
-    font-family:Consolas,"Courier New",monospace
-}
-
-.code{
-    min-height:330px;
-    color:#76ffc9
-}
-
-.loader{
-    min-height:400px;
-    color:#b0ffe1
-}
-
-.row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px
-}
-
-.buttons{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:14px
-}
-
-button{
-    border:none;
-    border-radius:11px;
-    padding:12px 18px;
-    background:#00ff9d;
-    color:#031009;
-    font-weight:700;
-    cursor:pointer;
-    transition:.18s
-}
-
-button:hover{
-    filter:brightness(1.08);
-    transform:translateY(-1px)
-}
-
-.secondary{
-    background:#10221b;
-    color:#62ffc0;
-    border:1px solid #285a45
-}
-
-.status{
-    margin-top:11px;
-    color:#61766d;
-    font-size:12px
-}
-
-.small{
-    font-size:11px;
-    color:#52635d;
-    margin-top:7px
-}
-
-@media(max-width:760px){
-    .row{
-        grid-template-columns:1fr
-    }
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Segoe UI,Arial,sans-serif}
+body{min-height:100vh;background:#080b0a;color:#eafff6;padding:25px 15px}
+.wrap{max-width:1100px;margin:auto}
+h1{text-align:center;color:#00ff9d;margin-bottom:7px}
+.sub{text-align:center;color:#718078;margin-bottom:25px}
+.box{background:#0d1210;border:1px solid #1e3c31;border-radius:16px;padding:18px;margin-bottom:16px}
+label{display:block;color:#8ea097;font-size:12px;margin-bottom:7px}
+textarea,input{width:100%;background:#070908;color:#72ffc7;border:1px solid #294137;border-radius:10px;padding:13px;outline:none;font-family:Consolas,monospace;font-size:13px}
+textarea{min-height:230px;resize:vertical;line-height:1.5}
+textarea:focus,input:focus{border-color:#00ff9d}
+button{margin-top:12px;background:#00ff9d;color:#021008;border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer}
+button.alt{background:#10251d;color:#6bffc6;border:1px solid #2d5946;margin-left:7px}
+.status{font-size:12px;color:#63766e;margin-top:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.row{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="wrap">
+<h1>QYREX OBFUSCATOR</h1>
+<div class="sub">Luau → QYREX TOKENS → Roblox</div>
 
-    <h1>QYREX LANGUAGE</h1>
-
-    <div class="subtitle">
-        Luau → QYREX secreto → Roblox
-    </div>
-
-    <div class="panel">
-
-        <div class="title">
-            CONFIGURACIÓN QYREX
-        </div>
-
-        <div class="row">
-
-            <div>
-                <label>LINK DEL PROGRAMA</label>
-
-                <input
-                    id="url"
-                    value="https://raw.githubusercontent.com/yarishdz2-gif/DT/refs/heads/main/qyrex_vm.txt"
-                >
-            </div>
-
-            <div>
-                <label>CLAVE QYREX</label>
-
-                <input
-                    id="key"
-                    value="QYREX-7F3A-PRKQ-2049"
-                >
-            </div>
-
-        </div>
-
-        <br>
-
-        <label>CÓDIGO LUAU</label>
-
-        <textarea
-            id="source"
-            placeholder='Pega aquí tu código Luau, por ejemplo:
-
-print("QYREX ONLINE")
-task.wait(1)
-print("Sistema cargado")'
-        ></textarea>
-
-        <div class="buttons">
-
-            <button onclick="generate()">
-                GENERAR QYREX
-            </button>
-
-            <button class="secondary" onclick="copyBox('obfuscatedUrl')">
-                COPIAR LINK QYREX
-            </button>
-
-            <button class="secondary" onclick="copyBox('obfuscatedCode')">
-                COPIAR CÓDIGO QYREX
-            </button>
-
-            <button class="secondary" onclick="copyBox('loader')">
-                COPIAR LOADER
-            </button>
-
-        </div>
-
-        <div id="status" class="status">
-            Esperando código...
-        </div>
-
-    </div>
-
-
-    <div class="panel">
-
-        <div class="title">
-            01 • LINK OFUSCADO
-        </div>
-
-        <textarea
-            id="obfuscatedUrl"
-            readonly
-            placeholder="Aquí aparecerá el link QYREX ofuscado..."
-        ></textarea>
-
-        <div class="small">
-            Este NO es un link navegable. Es la representación QYREX que el loader reconstruye.
-        </div>
-
-    </div>
-
-
-    <div class="panel">
-
-        <div class="title">
-            02 • CÓDIGO QYREX
-        </div>
-
-        <textarea
-            id="obfuscatedCode"
-            class="code"
-            readonly
-            placeholder="Aquí aparecerá el código QYREX..."
-        ></textarea>
-
-        <div class="small">
-            Copia TODO este contenido y pégalo dentro de qyrex_vm.txt.
-        </div>
-
-    </div>
-
-
-    <div class="panel">
-
-        <div class="title">
-            03 • LOADER ROBLOX
-        </div>
-
-        <textarea
-            id="loader"
-            class="loader"
-            readonly
-            placeholder="Aquí aparecerá el loader..."
-        ></textarea>
-
-        <div class="small">
-            Este es el script que descarga, decodifica y ejecuta QYREX.
-        </div>
-
-    </div>
-
+<div class="box">
+<div class="row">
+<div>
+<label>LINK</label>
+<input id="url" value="https://raw.githubusercontent.com/yarishdz2-gif/DT/refs/heads/main/qyrex_vm.txt">
+</div>
+<div>
+<label>KEY</label>
+<input id="key" value="QYREX-7F3A-PRKQ-2049">
+</div>
 </div>
 
+<br>
+
+<label>CÓDIGO LUAU</label>
+<textarea id="source" placeholder='print("Hola")
+task.wait(1)
+print("QYREX ONLINE")'></textarea>
+
+<button onclick="generate()">GENERAR</button>
+<button class="alt" onclick="copy("urlout")">COPIAR LINK</button>
+<button class="alt" onclick="copy("codeout")">COPIAR QYREX</button>
+<button class="alt" onclick="copy("loader")">COPIAR LOADER</button>
+
+<div id="status" class="status">Esperando...</div>
+</div>
+
+<div class="box">
+<label>LINK OFUSCADO</label>
+<textarea id="urlout" readonly></textarea>
+</div>
+
+<div class="box">
+<label>CÓDIGO OFUSCADO → qyrex_vm.txt</label>
+<textarea id="codeout" readonly></textarea>
+</div>
+
+<div class="box">
+<label>LOADER ROBLOX — UNA SOLA LÍNEA</label>
+<textarea id="loader" readonly></textarea>
+</div>
+</div>
 
 <script>
-
-const PREFIXES = [
-    "PRKQ",
-    "VQ7M",
-    "X9AZ",
-    "TQPX",
-    "N8LK",
-    "H2WF",
-    "R7QD",
-    "M4VX",
-    "Z8PN",
-    "KQ3R",
-    "F6TY",
-    "B9XW",
-    "J5LM",
-    "C7VA",
-    "P2ZS",
-    "W8KD"
+const TOKENS=[
+"K9M","RX7","P4D","ZT8",
+"NL2","FQ9","HB6","W3V",
+"CM5","YJ4","DS8","LQ1",
+"UA7","VE3","GS9","KP6"
 ];
 
-const HEX = "0123456789ABCDEF";
+const HEX="0123456789ABCDEF";
 
+function encode(text,key){
+    const a=new TextEncoder().encode(text);
+    const k=new TextEncoder().encode(key);
+    const out=[];
 
-function encodeQYREX(text,key){
-
-    const encoder = new TextEncoder();
-
-    const bytes = encoder.encode(text);
-
-    const keyBytes = encoder.encode(key);
-
-    const tokens = [];
-
-    for(let i = 0; i < bytes.length; i++){
-
-        const original = bytes[i];
-
-        const mask =
-            keyBytes[i % keyBytes.length];
-
-        const value =
-            (original + mask) & 255;
-
-        const high =
-            (value >> 4) & 15;
-
-        const low =
-            value & 15;
-
-        const token =
-            "QYX-" +
-            PREFIXES[high] +
-            "-" +
-            HEX[low];
-
-        tokens.push(token);
+    for(let i=0;i<a.length;i++){
+        const v=(a[i]+k[i%k.length])&255;
+        const hi=(v>>4)&15;
+        const lo=v&15;
+        out.push(TOKENS[hi]+"-"+HEX[lo]);
     }
 
-    return "QYX3:" + tokens.join(" ");
+    return "KX3:"+out.join(" ");
 }
 
-
-function makeKeyLua(key){
-
-    const encoder =
-        new TextEncoder();
-
-    const bytes =
-        encoder.encode(key);
-
-    return "string.char(" +
-        Array.from(bytes).join(",") +
-        ")";
+function luaKey(key){
+    return "string.char("+Array.from(new TextEncoder().encode(key)).join(",")+")";
 }
 
+function makeLoader(url,key){
+    const eurl=encode(url,key);
+    const klua=luaKey(key);
 
-function generateLoader(url,key,encodedCode){
+    const tokenTable="{"+
+        TOKENS.map((x,i)=>`["${x}"]=${i}`).join(",")+
+    "}";
 
-    const encodedURL =
-        encodeQYREX(url,key);
+    const hexTable="{"+
+        HEX.split("").map((x,i)=>`["${x}"]=${i}`).join(",")+
+    "}";
 
-    const keyLua =
-        makeKeyLua(key);
+    const line=
+`local a=${tokenTable};local b=${hexTable};local k=${klua};local function d(s)local o={};local n=0;s=tostring(s):gsub("^KX3:%s*","");for t in s:gmatch("%S+") do local x,y=t:match("^([A-Z0-9]+)%-([0-9A-F])$");if x and y then local h=a[x];local l=b[y];if h~=nil and l~=nil then n=n+1;local kb=string.byte(k,((n-1)%#k)+1);o[#o+1]=string.char((h*16+l-kb)%256)end end end;return table.concat(o)end;local u=d("${eurl.slice(4)}");local ok,r=pcall(function()return game:HttpGet(u)end);if not ok then return end;local c=d(r);if type(c)~="string" or c=="" then return end;local f=loadstring(c);if type(f)~="function" then return end;pcall(f)`;
 
-    return `local QYX_PREFIX = {
-    ["PRKQ"] = 0,
-    ["VQ7M"] = 1,
-    ["X9AZ"] = 2,
-    ["TQPX"] = 3,
-    ["N8LK"] = 4,
-    ["H2WF"] = 5,
-    ["R7QD"] = 6,
-    ["M4VX"] = 7,
-    ["Z8PN"] = 8,
-    ["KQ3R"] = 9,
-    ["F6TY"] = 10,
-    ["B9XW"] = 11,
-    ["J5LM"] = 12,
-    ["C7VA"] = 13,
-    ["P2ZS"] = 14,
-    ["W8KD"] = 15
+    return "-- Protect dowland by Qyrexobf\n"+line;
 }
-
-local QYX_HEX = {
-    ["0"] = 0,
-    ["1"] = 1,
-    ["2"] = 2,
-    ["3"] = 3,
-    ["4"] = 4,
-    ["5"] = 5,
-    ["6"] = 6,
-    ["7"] = 7,
-    ["8"] = 8,
-    ["9"] = 9,
-    ["A"] = 10,
-    ["B"] = 11,
-    ["C"] = 12,
-    ["D"] = 13,
-    ["E"] = 14,
-    ["F"] = 15
-}
-
-local QYX_KEY = ${keyLua}
-
-local function QYX_DECODE(data)
-
-    data = tostring(data)
-
-    data = data:gsub("^%s+", "")
-    data = data:gsub("%s+$", "")
-
-    data = data:gsub("^QYX3:%s*", "")
-
-    local keyLength = #QYX_KEY
-
-    if keyLength == 0 then
-        return nil, "QYREX KEY EMPTY"
-    end
-
-    local output = {}
-    local index = 0
-
-    for token in data:gmatch("%S+") do
-
-        local prefix,hex =
-            token:match("^QYX%-([A-Z0-9]+)%-([0-9A-F])$")
-
-        if prefix and hex then
-
-            local high =
-                QYX_PREFIX[prefix]
-
-            local low =
-                QYX_HEX[hex]
-
-            if high ~= nil and low ~= nil then
-
-                local encoded =
-                    high * 16 + low
-
-                index += 1
-
-                local keyByte =
-                    string.byte(
-                        QYX_KEY,
-                        ((index - 1) % keyLength) + 1
-                    )
-
-                local original =
-                    (encoded - keyByte) % 256
-
-                output[#output + 1] =
-                    string.char(original)
-
-            end
-        end
-    end
-
-    return table.concat(output)
-end
-
-
-local QYX_URL_DATA = [[
-${encodedURL}
-]]
-
-
-local QYX_FALLBACK = [[
-${encodedCode}
-]]
-
-
-local url, urlError =
-    QYX_DECODE(QYX_URL_DATA)
-
-if not url then
-    warn("[QYREX] URL ERROR")
-    warn(tostring(urlError))
-    return
-end
-
-
-local remoteOK, remoteData =
-    pcall(function()
-        return game:HttpGet(url)
-    end)
-
-
-local program
-
-
-if remoteOK and type(remoteData) == "string" and #remoteData > 0 then
-
-    local decodedRemote, decodeError =
-        QYX_DECODE(remoteData)
-
-    if decodedRemote and #decodedRemote > 0 then
-        program = decodedRemote
-    else
-        program = remoteData
-    end
-
-else
-
-    program =
-        QYX_DECODE(QYX_FALLBACK)
-
-end
-
-
-if not program or #program == 0 then
-
-    warn("[QYREX] No se pudo obtener el programa")
-
-    return
-
-end
-
-
-local compiler =
-    loadstring
-
-if type(compiler) ~= "function" then
-
-    warn("[QYREX] loadstring no está disponible")
-
-    return
-
-end
-
-
-local fn,compileError =
-    compiler(program)
-
-
-if not fn then
-
-    warn("[QYREX] ERROR DE COMPILACIÓN")
-
-    warn(tostring(compileError))
-
-    return
-
-end
-
-
-local success,runtimeError =
-    pcall(fn)
-
-
-if not success then
-
-    warn("[QYREX] ERROR DE EJECUCIÓN")
-
-    warn(tostring(runtimeError))
-
-    return
-
-end
-
-
-print("[QYREX] Programa ejecutado correctamente")
-`;
-}
-
 
 function generate(){
-
-    const source =
-        document.getElementById("source").value;
-
-    const url =
-        document.getElementById("url").value.trim();
-
-    const key =
-        document.getElementById("key").value;
-
-    const status =
-        document.getElementById("status");
-
+    const source=document.getElementById("source").value;
+    const url=document.getElementById("url").value.trim();
+    const key=document.getElementById("key").value;
 
     if(!source.trim()){
-
-        status.textContent =
-            "Pega código Luau primero.";
-
+        document.getElementById("status").textContent="Pega código primero.";
         return;
     }
 
-
-    if(!url){
-
-        status.textContent =
-            "Falta el link.";
-
+    if(!url||!key){
+        document.getElementById("status").textContent="Falta link o key.";
         return;
     }
 
+    const eurl=encode(url,key);
+    const ecode=encode(source,key);
+    const loader=makeLoader(url,key);
 
-    if(!key){
+    document.getElementById("urlout").value=eurl;
+    document.getElementById("codeout").value=ecode;
+    document.getElementById("loader").value=loader;
 
-        status.textContent =
-            "Falta la clave QYREX.";
-
-        return;
-    }
-
-
-    const encodedURL =
-        encodeQYREX(url,key);
-
-    const encodedCode =
-        encodeQYREX(source,key);
-
-    const loader =
-        generateLoader(
-            url,
-            key,
-            encodedCode
-        );
-
-
-    document.getElementById("obfuscatedUrl").value =
-        encodedURL;
-
-    document.getElementById("obfuscatedCode").value =
-        encodedCode;
-
-    document.getElementById("loader").value =
-        loader;
-
-
-    status.textContent =
-        "QYREX generado: " +
-        source.length.toLocaleString() +
-        " caracteres → " +
-        encodedCode.length.toLocaleString() +
-        " caracteres QYREX.";
+    document.getElementById("status").textContent=
+        "Generado correctamente.";
 }
 
-
-async function copyBox(id){
-
-    const element =
-        document.getElementById(id);
-
-    const value =
-        element.value;
-
-    if(!value){
-
-        alert("Primero genera QYREX.");
-
+async function copy(id){
+    const v=document.getElementById(id).value;
+    if(!v){
+        alert("Genera primero.");
         return;
     }
 
-
     try{
-
-        await navigator.clipboard.writeText(value);
-
+        await navigator.clipboard.writeText(v);
     }catch{
-
-        element.focus();
-        element.select();
-
+        const t=document.createElement("textarea");
+        t.value=v;
+        document.body.appendChild(t);
+        t.select();
         document.execCommand("copy");
+        t.remove();
     }
-
 
     alert("Copiado.");
 }
-
 </script>
 
 </body>
