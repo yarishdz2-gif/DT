@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QYREX Obfuscator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0f0f13; color: #e0e0e0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 15px; }
+        h1 { color: #00ff9d; margin-bottom: 8px; font-size: 2rem; }
+        p { color: #888; margin-bottom: 25px; }
+        .container { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 15px; }
+        textarea { width: 100%; height: 220px; background: #1a1a21; border: 1px solid #333; border-radius: 10px; color: #00ff9d; padding: 15px; font-size: 14px; resize: vertical; outline: none; }
+        textarea:focus { border-color: #00ff9d; }
+        button { background: #00ff9d; color: #000; border: none; padding: 14px 28px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #00cc7a; transform: scale(1.03); }
+        .btns { display: flex; gap: 12px; flex-wrap: wrap; }
+        #output { background: #121218; border: 1px solid #00ff9d33; }
+        .copy { background: #222; color: #00ff9d; border: 1px solid #00ff9d; }
+        .copy:hover { background: #00ff9d; color: #000; }
+    </style>
+</head>
+<body>
+    <h1>QYREX Obfuscator</h1>
+    <p>Ofuscador personalizado · QYX / QYREX / QKX</p>
+
+    <div class="container">
+        <textarea id="input" placeholder="Pega aquí tu código normal de Luau..."></textarea>
+
+        <div class="btns">
+            <button onclick="obfuscar()">Ofuscar con QYREX</button>
+            <button class="copy" onclick="copiar()">Copiar resultado</button>
+        </div>
+
+        <textarea id="output" readonly placeholder="Aquí saldrá el código ofuscado..."></textarea>
+    </div>
+
+    <script>
+        // Diccionario de ofuscación personalizado
+        const diccionario = {
+            "print": "QYX PRINT",
+            "wait": "QYREX WAIT",
+            "return": "QKX RETURN",
+            "function": "QXS FUNCTION",
+            "local": "QAZ LOCAL",
+            "if": "QWE IF",
+            "then": "ASD THEN",
+            "else": "ZXC ELSE",
+            "end": "QYREX END",
+            "for": "VBN FOR",
+            "while": "HJK WHILE",
+            "do": "UIO DO",
+            "true": "RTY TRUE",
+            "false": "FGH FALSE",
+            "nil": "JKL NIL",
+            "and": "QPL AND",
+            "or": "QMN OR",
+            "not": "QBV NOT",
+            "game": "QCN GAME",
+            "workspace": "QDX WORKSPACE",
+            "Players": "QEF PLAYERS",
+            "HttpGet": "QGH HTTPGET",
+            "loadstring": "QIJ LOADSTRING",
+            "pcall": "QKL PCALL",
+            "task.wait": "QYREX WAIT",
+            "task.spawn": "QOP SPAWN"
+        };
+
+        function obfuscar() {
+            let codigo = document.getElementById("input").value;
+            
+            // Reemplazar palabras del diccionario
+            for (const [normal, ofuscado] of Object.entries(diccionario)) {
+                const regex = new RegExp("\\b" + normal + "\\b", "gi");
+                codigo = codigo.replace(regex, ofuscado);
+            }
+
+            // Añadir estilo QYREX extra
+            codigo = codigo
+                .split("\n")
+                .map(linea => linea.trim() ? "QYX " + linea : "")
+                .join("\n");
+
+            document.getElementById("output").value = codigo.trim();
+        }
+
+        function copiar() {
+            const output = document.getElementById("output");
+            output.select();
+            document.execCommand("copy");
+            alert("¡Código ofuscado copiado!");
+        }
+    </script>
+</body>
+</html>
