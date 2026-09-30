@@ -7,3 +7,19 @@ QYREX WAIT 0.9
 QYX EXEC print("Este mensaje viene desde el lenguaje QYREX")
 QYX PRINT Todo funcionando correctamente
 QYREX END
+
+QKX INIT
+QXS LOAD
+QAZ HOOK
+QWE CHECK
+ASD RUN
+ZXC EXEC
+VBN WAIT 0.6
+HJK PRINT Carga secundaria completada
+UIO NOTIFY QYREX extendido activo
+RTY EXEC print("Codigos adicionales cargados")
+FGH WAIT 0.3
+JKL PRINT Finalizando...
+QPL END
+QMN CLEAN
+QBV EXIT
