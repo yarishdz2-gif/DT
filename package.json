@@ -1,0 +1,16 @@
+{
+  "name": "qyrex-multi-link-obfuscator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Qyrex multi-link token obfuscator",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
