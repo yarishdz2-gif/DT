@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QyrexObf — Multi-Link</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#07090a;color:#e9fff5;font:14px Segoe UI,Arial,sans-serif;padding:28px}main{max-width:1100px;margin:auto}h1{margin:0;color:#00ff9d;text-align:center}p{color:#7c8c85;text-align:center}.card{background:#0d1210;border:1px solid #20392f;border-radius:16px;padding:18px;margin:16px 0}label{display:block;color:#98a79f;font-size:12px;font-weight:700;margin:0 0 7px}input,textarea{width:100%;background:#070908;color:#7dffcb;border:1px solid #294438;border-radius:10px;padding:12px;outline:0;font:13px Consolas,monospace}input:focus,textarea:focus{border-color:#00ff9d}textarea{min-height:230px;resize:vertical;line-height:1.5}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}button{border:0;border-radius:10px;padding:11px 15px;background:#00ff9d;color:#031109;font-weight:800;cursor:pointer}.alt{background:#10251d;color:#78ffca;border:1px solid #2b5b47}small,.status{color:#6b7d74}.out{min-height:260px}.loader{min-height:380px}.links{max-height:300px;overflow:auto;background:#070908;border:1px solid #294438;border-radius:10px;padding:10px}.link{padding:8px;border-bottom:1px solid #15261f;word-break:break-all;font:12px Consolas,monospace;color:#70ffc5}.link:last-child{border-bottom:0}@media(max-width:760px){body{padding:14px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<h1>QYREX OBFUSCATOR</h1>
+<p>Luau → tokens QYREX → varios links reales → loader</p>
+
+<section class="card">
+<div class="grid">
+<div><label>URL BASE</label><input id="base" value="https://TU-PROYECTO.vercel.app/api/q"></div>
+<div><label>CLAVE QYREX</label><input id="key" value="QYREX-7F3A-PRKQ-2049"></div>
+</div>
+<br>
+<label>CÓDIGO LUAU</label>
+<textarea id="src" placeholder='print("QYREX ONLINE")&#10;task.wait(1)&#10;print("FUNCIONA")'></textarea>
+<div class="buttons">
+<button onclick="generate()">GENERAR TODO</button>
+<button class="alt" onclick="copyId('code')">COPIAR QYREX</button>
+<button class="alt" onclick="copyId('loader')">COPIAR LOADER</button>
+</div>
+<div id="status" class="status">Esperando…</div>
+</section>
+
+<section class="card">
+<label>LINKS QYREX GENERADOS</label>
+<div id="links" class="links">Genera primero.</div>
+</section>
+
+<section class="card">
+<label>CÓDIGO OFUSCADO — PEGA TODO ESTO EN TU qyrex_vm.txt SI QUIERES UN ARCHIVO ÚNICO</label>
+<textarea id="code" class="out" readonly></textarea>
+</section>
+
+<section class="card">
+<label>LOADER — PRIMERA LÍNEA COMENTARIO, SEGUNDA LÍNEA TODO EN UNA SOLA LÍNEA</label>
+<textarea id="loader" class="loader" readonly></textarea>
+</section>
+</main>
+
+<script>
+const TOKENS=["PRKQ","VQ7M","X9AZ","TQPX","N8LK","H2WF","R7QD","M4VX","Z8PN","KQ3R","F6TY","B9XW","J5LM","C7VA","P2ZS","W8KD"];
+const HEX="0123456789ABCDEF";
+function encode(text,key){const a=new TextEncoder().encode(text),k=new TextEncoder().encode(key),o=[];for(let i=0;i<a.length;i++){const v=(a[i]+k[i%k.length])&255;o.push(TOKENS[v>>4]+HEX[v&15])}return "QX9:"+o.join(" ")}
+function luaString(s){return JSON.stringify(s)}
+function loader(urls,key){
+ const eurls=urls.map(u=>encode(u,key).slice(4));
+ const map=TOKENS.map((t,i)=>`[${luaString(t)}]=${i}`).join(",");
+ const hex=HEX.split("").map((c,i)=>`[${luaString(c)}]=${i}`).join(",");
+ const kl=Array.from(new TextEncoder().encode(key)).join(",");
+ const arr="{" + eurls.map(x=>luaString(x)).join(",") + "}";
+ const line=`local a={${map}};local b={${hex}};local k=string.char(${kl});local function d(s)local o={};local i=0;s=tostring(s):gsub("^QX9:%s*","");for t in s:gmatch("%S+") do local p=t:sub(1,-2);local h=a[p];local l=b[t:sub(-1)];if h~=nil and l~=nil then i=i+1;local kb=string.byte(k,((i-1)%#k)+1);local v=h*16+l-kb;if v<0 then v=v+256 end;o[#o+1]=string.char(v)end end;return table.concat(o)end;local u={${arr.slice(1,-1).replace(/"/g,'"')}};local z={};for i,e in ipairs(u) do local x=d(e);local ok,r=pcall(function()return game:HttpGet(x)end);if not ok then local hs=game:GetService("HttpService");ok,r=pcall(function()return hs:GetAsync(x,false)end)end;if not ok then error("QYREX LINK "..i.." FAILED")end;z[#z+1]=d(r)end;local c=table.concat(z);local f,er=loadstring(c);if not f then error(er)end;return f()`;
+ return "-- Protect dowland by Qyrexobf\n"+line;
+}
+function generate(){
+ const src=document.getElementById('src').value,key=document.getElementById('key').value.trim(),base=document.getElementById('base').value.trim(),status=document.getElementById('status');
+ if(!src.trim())return status.textContent='Pega código Luau primero.';
+ if(!key)return status.textContent='Falta la clave.';
+ if(!/^https?:\/\//i.test(base))return status.textContent='La URL base debe empezar por http:// o https://';
+ const encoded=encode(src,key);
+ const raw=encoded.slice(4);
+ const chunkSize=320;
+ const parts=[];for(let i=0;i<raw.length;i+=chunkSize)parts.push('QX9:'+raw.slice(i,i+chunkSize));
+ const urls=parts.map(part=>base+'?d='+encodeURIComponent(part));
+ document.getElementById('links').innerHTML=urls.map((u,i)=>`<div class="link">${i+1}. ${escapeHtml(u)}</div>`).join('');
+ document.getElementById('code').value=encoded;
+ document.getElementById('loader').value=loader(urls,key);
+ status.textContent=`Listo: ${parts.length} link(s), ${src.length} caracteres Luau.`;
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+async function copyId(id){const v=document.getElementById(id).value;if(!v)return alert('Genera primero.');try{await navigator.clipboard.writeText(v)}catch{const t=document.createElement('textarea');t.value=v;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}alert('Copiado.')}
+</script>
+</body>
+</html>
