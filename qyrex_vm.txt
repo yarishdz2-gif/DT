@@ -1,0 +1,9 @@
+QYX PRINT DEMASIADO BIEN
+QYREX WAIT 1.4
+QYX PRINT Sistema QYREX VM activo
+QYREX NOTIFY VM personalizado cargado
+QYX PRINT Ejecutando lógica ofuscada...
+QYREX WAIT 0.9
+QYX EXEC print("Este mensaje viene desde el lenguaje QYREX")
+QYX PRINT Todo funcionando correctamente
+QYREX END
