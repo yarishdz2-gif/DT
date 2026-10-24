@@ -1,81 +1,433 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>QyrexObf — Multi-Link</title>
-<style>
-:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#07090a;color:#e9fff5;font:14px Segoe UI,Arial,sans-serif;padding:28px}main{max-width:1100px;margin:auto}h1{margin:0;color:#00ff9d;text-align:center}p{color:#7c8c85;text-align:center}.card{background:#0d1210;border:1px solid #20392f;border-radius:16px;padding:18px;margin:16px 0}label{display:block;color:#98a79f;font-size:12px;font-weight:700;margin:0 0 7px}input,textarea{width:100%;background:#070908;color:#7dffcb;border:1px solid #294438;border-radius:10px;padding:12px;outline:0;font:13px Consolas,monospace}input:focus,textarea:focus{border-color:#00ff9d}textarea{min-height:230px;resize:vertical;line-height:1.5}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}button{border:0;border-radius:10px;padding:11px 15px;background:#00ff9d;color:#031109;font-weight:800;cursor:pointer}.alt{background:#10251d;color:#78ffca;border:1px solid #2b5b47}small,.status{color:#6b7d74}.out{min-height:260px}.loader{min-height:380px}.links{max-height:300px;overflow:auto;background:#070908;border:1px solid #294438;border-radius:10px;padding:10px}.link{padding:8px;border-bottom:1px solid #15261f;word-break:break-all;font:12px Consolas,monospace;color:#70ffc5}.link:last-child{border-bottom:0}@media(max-width:760px){body{padding:14px}.grid{grid-template-columns:1fr}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b11">
+  <meta name="description" content="ZYROX — clan de duelos. Disciplina, habilidad y respeto dentro y fuera de la arena.">
+  <meta property="og:title" content="ZYROX — Duel Clan">
+  <meta property="og:description" content="No es solo ganar. Es cómo ganas.">
+  <meta property="og:type" content="website">
+  <title>ZYROX — Duel Clan</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23080b11'/%3E%3Cpath d='M12 15h40L25 47h27' fill='none' stroke='%2359e5ff' stroke-width='7' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b11;
+      --panel: #0e131c;
+      --panel-soft: #111a25;
+      --text: #f1f5f9;
+      --muted: #8a98aa;
+      --line: rgba(195, 215, 233, .13);
+      --blue: #59e5ff;
+      --blue-deep: #1e9fbd;
+      --max: 1160px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; line-height: 1.6; overflow-x: hidden; }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none; background: radial-gradient(ellipse at 73% 12%, rgba(25, 135, 164, .13), transparent 34%), radial-gradient(ellipse at 0% 65%, rgba(27, 76, 112, .10), transparent 35%); }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+    .wrap { width: min(var(--max), calc(100% - 44px)); margin-inline: auto; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--blue); font-size: .72rem; font-weight: 700; letter-spacing: .19em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 22px; height: 1px; background: currentColor; }
+    .display { font-family: 'Barlow Condensed', Impact, sans-serif; font-weight: 800; line-height: .91; letter-spacing: -.035em; text-transform: uppercase; }
+    .section { padding: 105px 0; }
+    .section-head { max-width: 660px; margin-bottom: 38px; }
+    .section-head h2 { margin: 14px 0 12px; font-size: clamp(2.8rem, 6vw, 4.6rem); }
+    .section-head p { max-width: 530px; margin: 0; color: var(--muted); font-size: .98rem; }
+
+    /* Navigation */
+    .topbar { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--line); background: rgba(8, 11, 17, .86); backdrop-filter: blur(18px); }
+    .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; flex-shrink: 0; }
+    .brand-mark { display: grid; place-items: center; width: 39px; height: 39px; border: 1px solid rgba(89, 229, 255, .55); background: linear-gradient(145deg, rgba(89,229,255,.15), rgba(89,229,255,.025)); color: var(--blue); clip-path: polygon(16% 0,100% 0,100% 78%,82% 100%,0 100%,0 20%); }
+    .brand-mark svg { width: 25px; height: 25px; }
+    .brand-name { font-family: 'Barlow Condensed', sans-serif; font-size: 1.55rem; font-weight: 900; letter-spacing: .08em; line-height: 1; }
+    .brand-name span { color: var(--blue); }
+    .brand-sub { display: block; margin-top: 4px; color: #718096; font-size: .56rem; letter-spacing: .19em; font-weight: 700; }
+    .nav-links { display: flex; align-items: center; gap: 30px; color: #a9b4c3; font-size: .85rem; font-weight: 600; }
+    .nav-links a { transition: color .2s ease; }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-cta, .btn { display: inline-flex; min-height: 46px; justify-content: center; align-items: center; gap: 10px; padding: 0 19px; border: 1px solid var(--blue); background: var(--blue); color: #041017; font-weight: 800; font-size: .83rem; cursor: pointer; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+    .nav-cta { min-height: 40px; padding: 0 15px; font-size: .78rem; }
+    .nav-cta:hover, .btn-primary:hover { transform: translateY(-2px); background: #8aeeff; box-shadow: 0 10px 28px rgba(89,229,255,.13); }
+    .menu-toggle { display: none; width: 42px; height: 42px; border: 1px solid var(--line); background: var(--panel); color: var(--text); cursor: pointer; }
+    .menu-toggle svg { width: 20px; }
+
+    /* Hero */
+    .hero { position: relative; min-height: 675px; display: grid; align-items: center; padding: 76px 0 90px; border-bottom: 1px solid var(--line); isolation: isolate; }
+    .hero-grid { display: grid; grid-template-columns: 1.04fr .96fr; gap: 45px; align-items: center; }
+    .hero-copy { position: relative; z-index: 2; }
+    .hero-kicker { display: inline-flex; gap: 9px; align-items: center; padding: 7px 11px; border: 1px solid var(--line); background: rgba(14,19,28,.72); color: #a6b3c2; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 12px var(--blue); }
+    .hero h1 { margin: 25px 0 23px; font-size: clamp(4.6rem, 10vw, 8.25rem); }
+    .hero h1 .line-two { display: block; color: var(--blue); }
+    .hero-desc { max-width: 455px; margin: 0; color: #9ba8b8; font-size: 1rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 31px; }
+    .btn-secondary { border-color: rgba(191,210,231,.23); background: rgba(15,21,31,.5); color: var(--text); }
+    .btn-secondary:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
+    .hero-footnote { margin-top: 30px; display: flex; align-items: center; gap: 10px; color: #718096; font-size: .73rem; }
+    .hero-footnote span { color: #e5edf5; font-weight: 700; }
+    .hero-art { position: relative; min-height: 450px; display: grid; place-items: center; }
+    .art-grid { position: absolute; inset: 4% -10% 0 0; opacity: .3; background-image: linear-gradient(rgba(89,229,255,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(89,229,255,.12) 1px, transparent 1px); background-size: 35px 35px; mask-image: radial-gradient(ellipse, black, transparent 68%); }
+    .art-ring { position: absolute; width: min(410px, 90%); aspect-ratio: 1; border: 1px solid rgba(89,229,255,.18); border-radius: 50%; box-shadow: 0 0 80px rgba(38,167,202,.06), inset 0 0 70px rgba(38,167,202,.04); }
+    .art-ring::before, .art-ring::after { content: ""; position: absolute; inset: 22px; border: 1px dashed rgba(89,229,255,.22); border-radius: 50%; }
+    .art-ring::after { inset: -18px; border-style: solid; border-color: rgba(89,229,255,.08); }
+    .crest { position: relative; width: min(330px, 75%); aspect-ratio: .92; display: grid; place-items: center; filter: drop-shadow(0 20px 40px rgba(0,0,0,.42)); }
+    .crest svg { width: 100%; height: 100%; overflow: visible; }
+    .art-index { position: absolute; right: 0; bottom: 13%; display: flex; align-items: center; gap: 9px; color: #718096; font-size: .67rem; letter-spacing: .15em; }
+    .art-index strong { color: var(--blue); font-weight: 700; }
+    .side-note { position: absolute; left: 0; bottom: 20%; color: #6c7d90; font-size: .61rem; writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: .2em; text-transform: uppercase; }
+
+    /* Values strip */
+    .value-strip { border-bottom: 1px solid var(--line); background: rgba(14,19,28,.55); }
+    .value-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .value-item { display: flex; align-items: center; gap: 15px; padding: 26px 24px; border-right: 1px solid var(--line); }
+    .value-item:first-child { border-left: 1px solid var(--line); }
+    .value-number { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; color: var(--blue); line-height: 1; }
+    .value-item strong { display: block; font-size: .86rem; letter-spacing: .07em; text-transform: uppercase; }
+    .value-item small { display: block; margin-top: 3px; color: var(--muted); font-size: .72rem; }
+
+    /* Identity */
+    .identity-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 65px; align-items: start; }
+    .identity-title { position: sticky; top: 115px; }
+    .identity-title h2 { margin: 15px 0 18px; font-size: clamp(3rem, 7vw, 5.5rem); }
+    .identity-title p { max-width: 380px; color: var(--muted); }
+    .identity-cards { display: grid; gap: 12px; }
+    .identity-card { display: grid; grid-template-columns: 52px 1fr auto; gap: 18px; align-items: center; padding: 23px 24px; border: 1px solid var(--line); background: linear-gradient(115deg, rgba(17,26,37,.78), rgba(12,16,24,.72)); transition: border-color .2s ease, transform .2s ease; }
+    .identity-card:hover { border-color: rgba(89,229,255,.4); transform: translateX(4px); }
+    .identity-icon { display: grid; place-items: center; width: 48px; height: 48px; color: var(--blue); border: 1px solid rgba(89,229,255,.24); background: rgba(89,229,255,.06); }
+    .identity-icon svg { width: 23px; height: 23px; }
+    .identity-card h3 { margin: 0 0 5px; font-size: 1rem; }
+    .identity-card p { margin: 0; color: var(--muted); font-size: .83rem; }
+    .card-index { align-self: start; color: #607186; font-family: 'Barlow Condensed', sans-serif; font-size: 1.15rem; }
+
+    /* Rules */
+    .rules-section { background: linear-gradient(180deg, rgba(13,19,28,.25), rgba(13,19,28,.8), rgba(13,19,28,.25)); border-block: 1px solid var(--line); }
+    .rules-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 80px; }
+    .rules-intro h2 { margin: 15px 0; font-size: clamp(3rem, 6vw, 5rem); }
+    .rules-intro p { color: var(--muted); }
+    .rules-tag { display: inline-block; margin-top: 17px; padding: 8px 12px; border: 1px solid rgba(89,229,255,.24); color: var(--blue); font-size: .7rem; font-weight: 700; letter-spacing: .12em; }
+    .rules-list { border-top: 1px solid var(--line); }
+    .rule { display: grid; grid-template-columns: 48px 1fr; gap: 15px; padding: 19px 0; border-bottom: 1px solid var(--line); }
+    .rule-num { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--blue); }
+    .rule h3 { margin: 0 0 4px; font-size: .95rem; }
+    .rule p { margin: 0; color: var(--muted); font-size: .82rem; }
+
+    /* Recruitment */
+    .recruit { padding: 90px 0 105px; }
+    .recruit-box { position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr .85fr; gap: 60px; align-items: center; padding: clamp(28px, 5vw, 60px); border: 1px solid rgba(89,229,255,.26); background: linear-gradient(120deg, #101923 0%, #0b1119 70%); }
+    .recruit-box::after { content: "Z"; position: absolute; right: -15px; bottom: -110px; font-family: 'Barlow Condensed', sans-serif; font-size: 27rem; line-height: 1; font-weight: 900; color: rgba(89,229,255,.035); pointer-events: none; }
+    .recruit-copy, .application { position: relative; z-index: 1; }
+    .recruit-copy h2 { max-width: 480px; margin: 15px 0; font-size: clamp(3rem, 6vw, 5rem); }
+    .recruit-copy p { max-width: 440px; color: var(--muted); }
+    .recruit-meta { display: flex; flex-wrap: wrap; gap: 16px 23px; margin-top: 25px; color: #9eabba; font-size: .77rem; }
+    .recruit-meta span { display: inline-flex; align-items: center; gap: 8px; }
+    .recruit-meta span::before { content: "+"; color: var(--blue); font-weight: 800; }
+    .application { padding: 22px; border: 1px solid var(--line); background: rgba(5,9,14,.62); }
+    .application h3 { margin: 0 0 5px; font-size: 1.1rem; }
+    .application .form-desc { margin: 0 0 19px; color: var(--muted); font-size: .79rem; }
+    .field { display: grid; gap: 7px; margin-bottom: 14px; }
+    .field label { color: #c8d3df; font-size: .75rem; font-weight: 700; }
+    .field input, .field select, .field textarea { width: 100%; min-height: 44px; padding: 11px 12px; border: 1px solid rgba(183,203,222,.17); border-radius: 0; background: #0b1119; color: var(--text); outline: none; }
+    .field textarea { min-height: 74px; resize: vertical; }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--blue); }
+    .application .btn { width: 100%; }
+    .form-note { margin: 11px 0 0; color: #718096; font-size: .69rem; }
+    .form-result { display: none; margin-top: 16px; padding: 14px; border: 1px solid rgba(89,229,255,.25); background: rgba(89,229,255,.05); }
+    .form-result.visible { display: block; }
+    .form-result p { margin: 0 0 11px; color: #d8e5ef; font-size: .8rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .copy-btn { padding: 8px 11px; border: 1px solid rgba(89,229,255,.45); background: transparent; color: var(--blue); cursor: pointer; font-size: .75rem; font-weight: 700; }
+    .status-message { min-height: 20px; margin-top: 9px; color: var(--blue); font-size: .74rem; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--line); }
+    .footer-main { display: flex; align-items: center; justify-content: space-between; gap: 25px; padding: 28px 0; }
+    .footer-copy { color: #718096; font-size: .75rem; }
+    .footer-motto { color: #a9b7c6; font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; }
+    .back-top { display: inline-flex; align-items: center; gap: 8px; color: var(--blue); font-size: .75rem; font-weight: 700; }
+    .back-top svg { width: 16px; height: 16px; }
+    .footer-bottom { padding: 14px 0 20px; border-top: 1px solid rgba(195,215,233,.07); color: #526173; font-size: .68rem; }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    @media (max-width: 900px) {
+      .nav-links { gap: 17px; }
+      .hero-grid { gap: 8px; grid-template-columns: 1.05fr .95fr; }
+      .hero h1 { font-size: clamp(4.3rem, 11vw, 6.5rem); }
+      .hero-art { min-height: 370px; }
+      .identity-grid, .rules-layout { gap: 40px; }
+      .recruit-box { gap: 30px; }
+    }
+    @media (max-width: 700px) {
+      .wrap { width: min(var(--max), calc(100% - 32px)); }
+      .nav { min-height: 68px; }
+      .menu-toggle { display: grid; place-items: center; }
+      .nav-cta { margin-left: auto; }
+      .nav-links { position: absolute; top: 68px; left: 0; right: 0; display: none; padding: 16px; flex-direction: column; align-items: stretch; gap: 0; border-bottom: 1px solid var(--line); background: #080b11; }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 13px 9px; }
+      .nav-cta { display: none; }
+      .hero { min-height: auto; padding: 66px 0 50px; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: clamp(4.3rem, 18vw, 7rem); }
+      .hero-desc { font-size: .92rem; }
+      .hero-art { min-height: 330px; margin-top: -2px; }
+      .crest { width: min(260px, 68%); }
+      .art-ring { width: 290px; max-width: 92%; }
+      .side-note { left: 4%; bottom: 13%; }
+      .art-index { right: 3%; bottom: 9%; }
+      .value-grid { grid-template-columns: 1fr; }
+      .value-item, .value-item:first-child { border-left: 0; border-right: 0; border-bottom: 1px solid var(--line); padding: 17px 5px; }
+      .value-item:last-child { border-bottom: 0; }
+      .section { padding: 72px 0; }
+      .identity-grid, .rules-layout, .recruit-box { grid-template-columns: 1fr; gap: 30px; }
+      .identity-title { position: static; }
+      .identity-card { grid-template-columns: 45px 1fr auto; gap: 13px; padding: 17px 14px; }
+      .identity-icon { width: 43px; height: 43px; }
+      .rules-layout { gap: 20px; }
+      .recruit { padding: 70px 0; }
+      .recruit-box { padding: 27px 18px; }
+      .application { padding: 17px; }
+      .footer-main { flex-wrap: wrap; }
+      .footer-motto { order: 3; width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
 </head>
-<body>
-<main>
-<h1>QYREX OBFUSCATOR</h1>
-<p>Luau → tokens QYREX → varios links reales → loader</p>
+<body id="top">
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="ZYROX, inicio">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M6 7H26L10 25H26" stroke="currentColor" stroke-width="4" stroke-linecap="square" stroke-linejoin="miter"/><path d="M22 3L29 3L29 10" stroke="currentColor" stroke-width="1.5" opacity=".6"/></svg>
+        </span>
+        <span><span class="brand-name">ZYR<span>OX</span></span><span class="brand-sub">DUEL CLAN</span></span>
+      </a>
+      <nav class="nav-links" id="navLinks" aria-label="Navegación principal">
+        <a href="#inicio">Inicio</a>
+        <a href="#identidad">El clan</a>
+        <a href="#reglas">Reglas</a>
+        <a href="#reclutamiento">Reclutamiento</a>
+      </nav>
+      <a class="nav-cta" href="#reclutamiento">SOLICITAR INGRESO <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </header>
 
-<section class="card">
-<div class="grid">
-<div><label>URL BASE</label><input id="base" value="https://TU-PROYECTO.vercel.app/api/q"></div>
-<div><label>CLAVE QYREX</label><input id="key" value="QYREX-7F3A-PRKQ-2049"></div>
-</div>
-<br>
-<label>CÓDIGO LUAU</label>
-<textarea id="src" placeholder='print("QYREX ONLINE")&#10;task.wait(1)&#10;print("FUNCIONA")'></textarea>
-<div class="buttons">
-<button onclick="generate()">GENERAR TODO</button>
-<button class="alt" onclick="copyId('code')">COPIAR QYREX</button>
-<button class="alt" onclick="copyId('loader')">COPIAR LOADER</button>
-</div>
-<div id="status" class="status">Esperando…</div>
-</section>
+  <main>
+    <section class="hero" id="inicio">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <div class="hero-kicker"><span class="live-dot"></span> Clan de duelos · Identidad competitiva</div>
+          <h1 class="display">NO ES SOLO<br><span class="line-two">GANAR.</span></h1>
+          <p class="hero-desc">Es mantener la calma cuando todo se complica. Es mejorar en cada duelo y respetar a quien tienes enfrente. Esto es <strong>ZYROX</strong>.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#reclutamiento">QUIERO ENTRAR <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-secondary" href="#reglas">CONOCER LAS REGLAS <span aria-hidden="true">↓</span></a>
+          </div>
+          <div class="hero-footnote"><span>DISCIPLINA.</span> <span>HABILIDAD.</span> <span>RESPETO.</span></div>
+        </div>
+        <div class="hero-art" aria-label="Emblema geométrico de ZYROX">
+          <div class="art-grid" aria-hidden="true"></div><div class="art-ring" aria-hidden="true"></div>
+          <div class="side-note">Built for the arena · ZRX Division</div>
+          <div class="crest" aria-hidden="true">
+            <svg viewBox="0 0 360 390" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="plate" x1="45" y1="20" x2="310" y2="370" gradientUnits="userSpaceOnUse"><stop stop-color="#182938"/><stop offset=".5" stop-color="#0C141F"/><stop offset="1" stop-color="#05080E"/></linearGradient>
+                <linearGradient id="edge" x1="40" y1="25" x2="318" y2="350" gradientUnits="userSpaceOnUse"><stop stop-color="#9AF3FF"/><stop offset=".45" stop-color="#39BEDB"/><stop offset="1" stop-color="#1C5974"/></linearGradient>
+                <linearGradient id="letter" x1="100" y1="85" x2="255" y2="295" gradientUnits="userSpaceOnUse"><stop stop-color="#F4FEFF"/><stop offset=".42" stop-color="#74E9FF"/><stop offset="1" stop-color="#238EAD"/></linearGradient>
+                <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <path d="M180 15L310 65L331 197L276 315L180 373L84 315L29 197L50 65L180 15Z" fill="#05090F" stroke="#285267" stroke-width="2"/>
+              <path d="M180 30L294 74L313 194L264 300L180 351L96 300L47 194L66 74L180 30Z" fill="url(#plate)" stroke="url(#edge)" stroke-width="2.5"/>
+              <path d="M78 92L180 53L282 92M66 194L102 194M258 194L294 194M100 285L180 327L260 285" stroke="#59E5FF" stroke-opacity=".35" stroke-width="2"/>
+              <path d="M95 113L267 113L153 242L268 242" stroke="#03070B" stroke-width="33" stroke-linecap="square" stroke-linejoin="miter"/>
+              <path d="M95 113L267 113L153 242L268 242" stroke="url(#letter)" stroke-width="20" stroke-linecap="square" stroke-linejoin="miter" filter="url(#glow)"/>
+              <path d="M180 15L180 48M29 197L48 197M331 197L312 197" stroke="#9AF3FF" stroke-width="3"/>
+              <path d="M48 65L33 51M312 65L327 51M84 315L69 329M276 315L291 329" stroke="#59E5FF" stroke-width="2"/>
+              <circle cx="180" cy="68" r="4" fill="#B9F7FF"/><circle cx="180" cy="321" r="4" fill="#59E5FF"/>
+            </svg>
+          </div>
+          <div class="art-index"><strong>01 /</strong> SKILL OVER NOISE</div>
+        </div>
+      </div>
+    </section>
 
-<section class="card">
-<label>LINKS QYREX GENERADOS</label>
-<div id="links" class="links">Genera primero.</div>
-</section>
+    <div class="value-strip" aria-label="Valores del clan">
+      <div class="wrap value-grid">
+        <div class="value-item"><span class="value-number">01</span><div><strong>Disciplina</strong><small>La constancia marca la diferencia.</small></div></div>
+        <div class="value-item"><span class="value-number">02</span><div><strong>Habilidad</strong><small>Entrena. Aprende. Vuelve más fuerte.</small></div></div>
+        <div class="value-item"><span class="value-number">03</span><div><strong>Respeto</strong><small>El nivel se demuestra jugando.</small></div></div>
+      </div>
+    </div>
 
-<section class="card">
-<label>CÓDIGO OFUSCADO — PEGA TODO ESTO EN TU qyrex_vm.txt SI QUIERES UN ARCHIVO ÚNICO</label>
-<textarea id="code" class="out" readonly></textarea>
-</section>
+    <section class="section" id="identidad">
+      <div class="wrap identity-grid">
+        <div class="identity-title reveal">
+          <span class="eyebrow">Nuestra identidad</span>
+          <h2 class="display">UN NOMBRE.<br>UNA ACTITUD.</h2>
+          <p>ZYROX no se trata de aparentar. Se trata de jugar con cabeza, aprender de cada enfrentamiento y hacer que el equipo se gane su lugar.</p>
+        </div>
+        <div class="identity-cards">
+          <article class="identity-card reveal">
+            <div class="identity-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3l7 3v5c0 4.5-2.8 7.5-7 10-4.2-2.5-7-5.5-7-10V6l7-3z"/><path d="M8.5 12l2.2 2.2 4.8-5"/></svg></div>
+            <div><h3>Lealtad al equipo</h3><p>El respeto empieza con los tuyos. Aquí nadie necesita rebajar a otro para destacar.</p></div><span class="card-index">01</span>
+          </article>
+          <article class="identity-card reveal">
+            <div class="identity-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 18L10 6l4 8 2-4 4 8H4z"/><path d="M3 21h18"/></svg></div>
+            <div><h3>Mejora constante</h3><p>Las derrotas sirven para corregir. Cada duelo es una oportunidad para subir el nivel.</p></div><span class="card-index">02</span>
+          </article>
+          <article class="identity-card reveal">
+            <div class="identity-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v5l3 3M7 18l-1.5 2M17 18l1.5 2"/></svg></div>
+            <div><h3>Mentalidad competitiva</h3><p>Entra concentrado, juega limpio y deja que tu habilidad hable por ti.</p></div><span class="card-index">03</span>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<section class="card">
-<label>LOADER — PRIMERA LÍNEA COMENTARIO, SEGUNDA LÍNEA TODO EN UNA SOLA LÍNEA</label>
-<textarea id="loader" class="loader" readonly></textarea>
-</section>
-</main>
+    <section class="section rules-section" id="reglas">
+      <div class="wrap rules-layout">
+        <div class="rules-intro reveal">
+          <span class="eyebrow">Código del clan</span>
+          <h2 class="display">JUEGA<br>LIMPIO.</h2>
+          <p>Un buen clan se reconoce tanto por cómo gana como por cómo trata a los demás. Estas reglas son la base de ZYROX.</p>
+          <span class="rules-tag">LEE · RESPETA · REPRESENTA</span>
+        </div>
+        <div class="rules-list">
+          <article class="rule reveal"><span class="rule-num">01</span><div><h3>Respeta a todos</h3><p>Sin acoso, insultos personales ni ataques por perder un duelo.</p></div></article>
+          <article class="rule reveal"><span class="rule-num">02</span><div><h3>Juego limpio, siempre</h3><p>No uses hacks, exploits ni ventajas injustas para conseguir victorias.</p></div></article>
+          <article class="rule reveal"><span class="rule-num">03</span><div><h3>Acepta el resultado</h3><p>Gana con humildad y pierde con dignidad. Aprende de cada partida.</p></div></article>
+          <article class="rule reveal"><span class="rule-num">04</span><div><h3>Cuida el nombre ZYROX</h3><p>Representa al clan con madurez dentro y fuera de los duelos.</p></div></article>
+          <article class="rule reveal"><span class="rule-num">05</span><div><h3>Sigue las indicaciones</h3><p>Escucha a los líderes y resuelve los problemas sin crear drama.</p></div></article>
+          <article class="rule reveal"><span class="rule-num">06</span><div><h3>La lealtad se demuestra</h3><p>Apoya al equipo, cumple tus compromisos y comunica tus dudas con respeto.</p></div></article>
+        </div>
+      </div>
+    </section>
 
-<script>
-const TOKENS=["PRKQ","VQ7M","X9AZ","TQPX","N8LK","H2WF","R7QD","M4VX","Z8PN","KQ3R","F6TY","B9XW","J5LM","C7VA","P2ZS","W8KD"];
-const HEX="0123456789ABCDEF";
-function encode(text,key){const a=new TextEncoder().encode(text),k=new TextEncoder().encode(key),o=[];for(let i=0;i<a.length;i++){const v=(a[i]+k[i%k.length])&255;o.push(TOKENS[v>>4]+HEX[v&15])}return "QX9:"+o.join(" ")}
-function luaString(s){return JSON.stringify(s)}
-function loader(urls,key){
- const eurls=urls.map(u=>encode(u,key).slice(4));
- const map=TOKENS.map((t,i)=>`[${luaString(t)}]=${i}`).join(",");
- const hex=HEX.split("").map((c,i)=>`[${luaString(c)}]=${i}`).join(",");
- const kl=Array.from(new TextEncoder().encode(key)).join(",");
- const arr="{" + eurls.map(x=>luaString(x)).join(",") + "}";
- const line=`local a={${map}};local b={${hex}};local k=string.char(${kl});local function d(s)local o={};local i=0;s=tostring(s):gsub("^QX9:%s*","");for t in s:gmatch("%S+") do local p=t:sub(1,-2);local h=a[p];local l=b[t:sub(-1)];if h~=nil and l~=nil then i=i+1;local kb=string.byte(k,((i-1)%#k)+1);local v=h*16+l-kb;if v<0 then v=v+256 end;o[#o+1]=string.char(v)end end;return table.concat(o)end;local u={${arr.slice(1,-1).replace(/"/g,'"')}};local z={};for i,e in ipairs(u) do local x=d(e);local ok,r=pcall(function()return game:HttpGet(x)end);if not ok then local hs=game:GetService("HttpService");ok,r=pcall(function()return hs:GetAsync(x,false)end)end;if not ok then error("QYREX LINK "..i.." FAILED")end;z[#z+1]=d(r)end;local c=table.concat(z);local f,er=loadstring(c);if not f then error(er)end;return f()`;
- return "-- Protect dowland by Qyrexobf\n"+line;
-}
-function generate(){
- const src=document.getElementById('src').value,key=document.getElementById('key').value.trim(),base=document.getElementById('base').value.trim(),status=document.getElementById('status');
- if(!src.trim())return status.textContent='Pega código Luau primero.';
- if(!key)return status.textContent='Falta la clave.';
- if(!/^https?:\/\//i.test(base))return status.textContent='La URL base debe empezar por http:// o https://';
- const encoded=encode(src,key);
- const raw=encoded.slice(4);
- const chunkSize=320;
- const parts=[];for(let i=0;i<raw.length;i+=chunkSize)parts.push('QX9:'+raw.slice(i,i+chunkSize));
- const urls=parts.map(part=>base+'?d='+encodeURIComponent(part));
- document.getElementById('links').innerHTML=urls.map((u,i)=>`<div class="link">${i+1}. ${escapeHtml(u)}</div>`).join('');
- document.getElementById('code').value=encoded;
- document.getElementById('loader').value=loader(urls,key);
- status.textContent=`Listo: ${parts.length} link(s), ${src.length} caracteres Luau.`;
-}
-function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-async function copyId(id){const v=document.getElementById(id).value;if(!v)return alert('Genera primero.');try{await navigator.clipboard.writeText(v)}catch{const t=document.createElement('textarea');t.value=v;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}alert('Copiado.')}
-</script>
+    <section class="recruit" id="reclutamiento">
+      <div class="wrap">
+        <div class="recruit-box reveal">
+          <div class="recruit-copy">
+            <span class="eyebrow">Reclutamiento</span>
+            <h2 class="display">¿TIENES LO<br>NECESARIO?</h2>
+            <p>No importa presumir. Importa tener ganas de mejorar, jugar limpio y aportar al equipo. Cuéntanos un poco sobre ti.</p>
+            <div class="recruit-meta"><span>Actitud primero</span><span>Respeto obligatorio</span><span>Ganas de mejorar</span></div>
+          </div>
+          <form class="application" id="joinForm">
+            <h3>Solicitud de ingreso</h3>
+            <p class="form-desc">Completa tus datos y prepara tu solicitud para enviarla a los líderes.</p>
+            <div class="field"><label for="playerName">Nombre o tag de jugador *</label><input id="playerName" name="playerName" autocomplete="nickname" maxlength="32" placeholder="Ej. ZyroxPlayer" required></div>
+            <div class="field"><label for="game">Juego en el que compites *</label><input id="game" name="game" maxlength="50" placeholder="¿En qué juego haces duelos?" required></div>
+            <div class="field"><label for="skill">Tu nivel actual</label><select id="skill" name="skill"><option value="Sin especificar">Selecciona tu nivel</option><option>Principiante</option><option>Intermedio</option><option>Avanzado</option><option>Competitivo</option></select></div>
+            <div class="field"><label for="reason">¿Por qué quieres entrar?</label><textarea id="reason" name="reason" maxlength="240" placeholder="Cuéntanos brevemente..."></textarea></div>
+            <button class="btn btn-primary" type="submit">PREPARAR SOLICITUD <span aria-hidden="true">↗</span></button>
+            <p class="form-note">Esta página no guarda ni envía tus datos a un servidor. Podrás copiar el texto y mandarlo al equipo.</p>
+            <div class="form-result" id="formResult" aria-live="polite">
+              <p id="applicationText"></p>
+              <button class="copy-btn" type="button" id="copyApplication">COPIAR SOLICITUD</button>
+              <div class="status-message" id="copyStatus"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-main">
+      <a class="brand" href="#top" aria-label="ZYROX, volver al inicio"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M6 7H26L10 25H26" stroke="currentColor" stroke-width="4" stroke-linecap="square"/></svg></span><span><span class="brand-name">ZYR<span>OX</span></span><span class="brand-sub">DUEL CLAN</span></span></a>
+      <div class="footer-motto">Skill over noise.</div>
+      <a class="back-top" href="#top">VOLVER ARRIBA <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg></a>
+    </div>
+    <div class="wrap footer-bottom">© <span id="year"></span> ZYROX Duel Clan. Hecho para competir con respeto.</div>
+  </footer>
+
+  <script>
+    (() => {
+      const menuToggle = document.getElementById('menuToggle');
+      const navLinks = document.getElementById('navLinks');
+      menuToggle.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+        menuToggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+      });
+      navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Abrir menú');
+      }));
+
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      const revealItems = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        revealItems.forEach(item => observer.observe(item));
+      } else {
+        revealItems.forEach(item => item.classList.add('is-visible'));
+      }
+
+      const joinForm = document.getElementById('joinForm');
+      const formResult = document.getElementById('formResult');
+      const applicationText = document.getElementById('applicationText');
+      const copyStatus = document.getElementById('copyStatus');
+      let preparedApplication = '';
+
+      joinForm.addEventListener('submit', event => {
+        event.preventDefault();
+        if (!joinForm.reportValidity()) return;
+        const data = new FormData(joinForm);
+        const player = String(data.get('playerName') || '').trim();
+        const game = String(data.get('game') || '').trim();
+        const skill = String(data.get('skill') || 'Sin especificar');
+        const reason = String(data.get('reason') || '').trim();
+        preparedApplication = [
+          '⚔️ SOLICITUD DE INGRESO — ZYROX',
+          'Jugador: ' + player,
+          'Juego: ' + game,
+          'Nivel: ' + skill,
+          'Motivo: ' + (reason || 'No especificado')
+        ].join('\n');
+        applicationText.textContent = preparedApplication;
+        formResult.classList.add('visible');
+        copyStatus.textContent = 'Tu solicitud está lista. Cópiala y envíala a un líder del clan.';
+        formResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+
+      document.getElementById('copyApplication').addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(preparedApplication);
+          copyStatus.textContent = 'Solicitud copiada. Ya puedes pegarla en el chat del clan.';
+        } catch (error) {
+          const range = document.createRange();
+          range.selectNodeContents(applicationText);
+          const selection = window.getSelection();
+          selection.removeAllRanges();
+          selection.addRange(range);
+          copyStatus.textContent = 'No se pudo copiar automáticamente. Selecciona el texto y cópialo manualmente.';
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
