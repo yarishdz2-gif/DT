@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propiedades | Inmobiliaria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">[L]</div>
+      <span>[Nombre de la Empresa]</span>
+    </a>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="propiedades.html" class="active">Propiedades</a>
+      <a href="servicios.html">Servicios</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="contacto.html" class="btn btn-dark btn-sm">Agendar visita</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="sec-label">Catálogo completo</div>
+    <h1>Todas las propiedades</h1>
+    <p>Filtra por tipo, precio, habitaciones o ubicación y encuentra exactamente lo que buscas.</p>
+  </div>
+</section>
+
+<section style="padding-top:40px">
+  <div class="container">
+    <div class="filters">
+      <select id="filter-tipo" onchange="aplicarFiltros()">
+        <option value="">Todos los tipos</option>
+        <option value="casa">Casa</option>
+        <option value="departamento">Departamento</option>
+        <option value="terreno">Terreno</option>
+        <option value="local">Local comercial</option>
+      </select>
+      <select id="filter-precio" onchange="aplicarFiltros()">
+        <option value="">Cualquier precio</option>
+        <option value="0-300000">Hasta $300,000</option>
+        <option value="300000-600000">$300k – $600k</option>
+        <option value="600000-1000000">$600k – $1M</option>
+        <option value="1000000-99999999">Más de $1M</option>
+      </select>
+      <select id="filter-hab" onchange="aplicarFiltros()">
+        <option value="">Habitaciones</option>
+        <option value="1">1+</option>
+        <option value="2">2+</option>
+        <option value="3">3+</option>
+        <option value="4">4+</option>
+      </select>
+      <input type="text" id="filter-texto" placeholder="Buscar por nombre o zona..." oninput="aplicarFiltros()">
+      <span class="count" id="result-count">0 propiedades</span>
+    </div>
+    <div class="prop-grid" id="catalog-grid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo"><div class="logo-mark">[L]</div><span>[Nombre de la Empresa]</span></a>
+        <p>Especialistas en propiedades residenciales y de inversión.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="propiedades.html">Propiedades</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="servicios.html">Compra</a></li>
+          <li><a href="servicios.html">Venta</a></li>
+          <li><a href="servicios.html">Alquiler</a></li>
+          <li><a href="servicios.html">Inversión</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Aviso de privacidad</a></li>
+          <li><a href="#">Términos de uso</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 [Nombre de la Empresa]. Todos los derechos reservados.</span>
+      <span></span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modal" onclick="cerrarModal(event)">
+  <div class="modal" id="modal-content"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+// Leer parámetros de URL
+const params = new URLSearchParams(window.location.search);
+if (params.get('tipo')) document.getElementById('filter-tipo').value = params.get('tipo');
+if (params.get('precio')) document.getElementById('filter-precio').value = params.get('precio');
+if (params.get('q')) document.getElementById('filter-texto').value = params.get('q');
+aplicarFiltros();
+</script>
+</body>
+</html>

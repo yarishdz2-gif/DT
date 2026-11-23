@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contacto | Inmobiliaria</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <div class="container header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-mark">[L]</div>
+      <span>[Nombre de la Empresa]</span>
+    </a>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="propiedades.html">Propiedades</a>
+      <a href="servicios.html">Servicios</a>
+      <a href="contacto.html" class="active">Contacto</a>
+      <a href="contacto.html" class="btn btn-dark btn-sm">Agendar visita</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="sec-label">Estamos aquí</div>
+    <h1>Contáctanos</h1>
+    <p>Completa el formulario y un asesor te contactará a la brevedad.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Información de contacto</h3>
+        <p>Nuestro equipo está disponible para responder tus dudas y ayudarte a encontrar la mejor opción.</p>
+        <div class="c-item">
+          <div class="c-icon">📍</div>
+          <div><strong>Dirección</strong><span>[Dirección de la oficina]<br>[Ciudad, País]</span></div>
+        </div>
+        <div class="c-item">
+          <div class="c-icon">📞</div>
+          <div><strong>Teléfono</strong><span>[Número de teléfono]</span></div>
+        </div>
+        <div class="c-item">
+          <div class="c-icon">✉️</div>
+          <div><strong>Correo</strong><span>[correo@empresa.com]</span></div>
+        </div>
+        <div class="c-item">
+          <div class="c-icon">🕒</div>
+          <div><strong>Horario</strong><span>Lun – Vie: 9:00 – 19:00<br>Sáb: 10:00 – 14:00</span></div>
+        </div>
+      </div>
+      <form class="contact-form" onsubmit="enviarFormulario(event)">
+        <div class="fg-row">
+          <div class="fg"><label>Nombre completo</label><input type="text" required placeholder="Tu nombre"></div>
+          <div class="fg"><label>Correo electrónico</label><input type="email" required placeholder="tu@email.com"></div>
+        </div>
+        <div class="fg-row">
+          <div class="fg"><label>Teléfono</label><input type="tel" placeholder="+XX ..."></div>
+          <div class="fg">
+            <label>Me interesa</label>
+            <select>
+              <option>Comprar propiedad</option>
+              <option>Vender propiedad</option>
+              <option>Alquilar</option>
+              <option>Inversión</option>
+              <option>Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg"><label>Mensaje</label><textarea placeholder="Cuéntanos qué estás buscando..."></textarea></div>
+        <button type="submit" class="btn btn-dark" style="width:100%">Enviar mensaje</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="index.html" class="logo"><div class="logo-mark">[L]</div><span>[Nombre de la Empresa]</span></a>
+        <p>Especialistas en propiedades residenciales y de inversión.</p>
+      </div>
+      <div class="foot-col"><h4>Navegación</h4><ul><li><a href="index.html">Inicio</a></li><li><a href="propiedades.html">Propiedades</a></li><li><a href="servicios.html">Servicios</a></li><li><a href="contacto.html">Contacto</a></li></ul></div>
+      <div class="foot-col"><h4>Servicios</h4><ul><li><a href="servicios.html">Compra</a></li><li><a href="servicios.html">Venta</a></li><li><a href="servicios.html">Alquiler</a></li></ul></div>
+      <div class="foot-col"><h4>Legal</h4><ul><li><a href="#">Aviso de privacidad</a></li><li><a href="#">Términos</a></li></ul></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 [Nombre de la Empresa]. Todos los derechos reservados.</span><span></span></div>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
