@@ -3,173 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inicio | Inmobiliaria</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<title>Admin | Panel de Administración</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b1220;
+  --card: #121a2b;
+  --border: #1e2a3f;
+  --text: #e8edf5;
+  --muted: #8b9bb4;
+  --gold: #c9a84c;
+  --accent: #3b82f6;
+  --success: #10b981;
+  --danger: #ef4444;
+  --radius: 10px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-wrap {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+}
+.login-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 40px 36px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+}
+.login-logo {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, #1a2740, #0b1220);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; font-weight: 700; color: var(--gold);
+  margin: 0 auto 24px;
+}
+.login-card h1 {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.login-card p {
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin-bottom: 28px;
+}
+.fg { margin-bottom: 18px; }
+.fg label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.fg input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+.fg input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+.btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--gold);
+  color: #0b1220;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin-top: 8px;
+}
+.btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.error {
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.3);
+  color: #fca5a5;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+  display: none;
+}
+.error.show { display: block; }
+.back {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+.back:hover { color: var(--gold); }
+</style>
 </head>
 <body>
-
-<div id="welcome-screen">
-  <div class="welcome-content">
-    <div class="welcome-logo">[L]</div>
-    <h1 class="welcome-title">Bienvenido</h1>
-    <p class="welcome-sub">Welcome</p>
-    <div class="welcome-line"></div>
-    <p class="welcome-tagline">Excelencia en bienes raíces</p>
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">A</div>
+    <h1>Panel de Administración</h1>
+    <p>Acceso exclusivo para administradores</p>
+    <div class="error" id="error">Contraseña incorrecta. Intenta de nuevo.</div>
+    <form onsubmit="login(event)">
+      <div class="fg">
+        <label>Contraseña de administrador</label>
+        <input type="password" id="pass" placeholder="Ingresa la contraseña" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn">Entrar al panel</button>
+    </form>
+    <a href="../index.html" class="back">← Volver al sitio web</a>
   </div>
 </div>
-
-<header>
-  <div class="container header-inner">
-    <a href="index.html" class="logo">
-      <div class="logo-mark">[L]</div>
-      <span>[Nombre de la Empresa]</span>
-    </a>
-    <nav>
-      <a href="index.html" class="active">Inicio</a>
-      <a href="propiedades.html">Propiedades</a>
-      <a href="servicios.html">Servicios</a>
-      <a href="contacto.html">Contacto</a>
-      <a href="contacto.html" class="btn btn-dark btn-sm">Agendar visita</a>
-    </nav>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="container">
-    <div class="hero-content">
-      <div class="hero-label">Propiedades exclusivas</div>
-      <h1>Encuentra el hogar que siempre soñaste</h1>
-      <p>Expertos en bienes raíces de alto valor. Te acompañamos en cada paso para encontrar la propiedad perfecta.</p>
-      <div class="search-box">
-        <select id="hero-tipo">
-          <option value="">Tipo de propiedad</option>
-          <option value="casa">Casa</option>
-          <option value="departamento">Departamento</option>
-          <option value="terreno">Terreno</option>
-          <option value="local">Local comercial</option>
-        </select>
-        <select id="hero-precio">
-          <option value="">Rango de precio</option>
-          <option value="0-300000">Hasta $300,000</option>
-          <option value="300000-600000">$300,000 – $600,000</option>
-          <option value="600000-1000000">$600,000 – $1,000,000</option>
-          <option value="1000000-99999999">Más de $1,000,000</option>
-        </select>
-        <input type="text" id="hero-ubicacion" placeholder="Ciudad o zona...">
-        <button class="btn btn-gold" onclick="buscar()">Buscar</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="stats-bar">
-  <div class="container">
-    <div class="stats-grid">
-      <div class="stat"><strong>+920</strong><span>Propiedades vendidas</span></div>
-      <div class="stat"><strong>+1,400</strong><span>Clientes satisfechos</span></div>
-      <div class="stat"><strong>16</strong><span>Años de experiencia</span></div>
-      <div class="stat"><strong>98%</strong><span>Recomendación</span></div>
-    </div>
-  </div>
-</div>
-
-<section>
-  <div class="container">
-    <div class="sec-head">
-      <div class="sec-label">Selección destacada</div>
-      <h2>Propiedades en evidencia</h2>
-      <p>Una muestra de las mejores oportunidades disponibles actualmente.</p>
-    </div>
-    <div class="prop-grid" id="featured-grid"></div>
-    <div style="text-align:center;margin-top:40px">
-      <a href="propiedades.html" class="btn btn-dark">Ver todas las propiedades</a>
-    </div>
-  </div>
-</section>
-
-<section class="cta">
-  <div class="container">
-    <h2>¿Listo para dar el siguiente paso?</h2>
-    <p>Agenda una consulta gratuita con uno de nuestros asesores especializados.</p>
-    <a href="contacto.html" class="btn btn-gold">Solicitar asesoría</a>
-  </div>
-</section>
-
-<footer>
-  <div class="container">
-    <div class="foot-grid">
-      <div class="foot-brand">
-        <a href="index.html" class="logo"><div class="logo-mark">[L]</div><span>[Nombre de la Empresa]</span></a>
-        <p>Especialistas en propiedades residenciales y de inversión. Transparencia, experiencia y resultados.</p>
-      </div>
-      <div class="foot-col">
-        <h4>Navegación</h4>
-        <ul>
-          <li><a href="index.html">Inicio</a></li>
-          <li><a href="propiedades.html">Propiedades</a></li>
-          <li><a href="servicios.html">Servicios</a></li>
-          <li><a href="contacto.html">Contacto</a></li>
-        </ul>
-      </div>
-      <div class="foot-col">
-        <h4>Servicios</h4>
-        <ul>
-          <li><a href="servicios.html">Compra</a></li>
-          <li><a href="servicios.html">Venta</a></li>
-          <li><a href="servicios.html">Alquiler</a></li>
-          <li><a href="servicios.html">Inversión</a></li>
-        </ul>
-      </div>
-      <div class="foot-col">
-        <h4>Legal</h4>
-        <ul>
-          <li><a href="#">Aviso de privacidad</a></li>
-          <li><a href="#">Términos de uso</a></li>
-          <li><a href="#">Política de cookies</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <span>© 2026 [Nombre de la Empresa]. Todos los derechos reservados.</span>
-      <span>Diseño profesional</span>
-    </div>
-  </div>
-</footer>
-
-<div class="modal-overlay" id="modal" onclick="cerrarModal(event)">
-  <div class="modal" id="modal-content"></div>
-</div>
-<div class="toast" id="toast"></div>
-
-<script src="data.js"></script>
-<script src="app.js"></script>
 <script>
-window.addEventListener('load', () => {
-  const welcome = document.getElementById('welcome-screen');
-  setTimeout(() => {
-    welcome.classList.add('hide');
-    setTimeout(() => welcome.remove(), 1100);
-  }, 2600);
-});
+const ADMIN_PASS = 'ST/&gauidnslkjj("#)/"!jmssldnajsdbaskdbsDA';
 
-// Header shrink on scroll
-window.addEventListener('scroll', () => {
-  const header = document.querySelector('header');
-  if (header) header.classList.toggle('scrolled', window.scrollY > 40);
-});
-renderFeatured();
-function buscar() {
-  const tipo = document.getElementById('hero-tipo').value;
-  const precio = document.getElementById('hero-precio').value;
-  const ubic = document.getElementById('hero-ubicacion').value;
-  let url = 'propiedades.html?';
-  if (tipo) url += 'tipo=' + tipo + '&';
-  if (precio) url += 'precio=' + precio + '&';
-  if (ubic) url += 'q=' + encodeURIComponent(ubic);
-  window.location.href = url;
+// Si ya está logueado, redirigir
+if (sessionStorage.getItem('admin_auth') === 'ok') {
+  window.location.href = 'dashboard.html';
+}
+
+function login(e) {
+  e.preventDefault();
+  const pass = document.getElementById('pass').value;
+  if (pass === ADMIN_PASS) {
+    sessionStorage.setItem('admin_auth', 'ok');
+    sessionStorage.setItem('admin_login_time', new Date().toISOString());
+    window.location.href = 'dashboard.html';
+  } else {
+    document.getElementById('error').classList.add('show');
+    document.getElementById('pass').value = '';
+    document.getElementById('pass').focus();
+  }
 }
 </script>
 </body>

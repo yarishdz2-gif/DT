@@ -89,13 +89,59 @@ function cerrarModal(e) {
 }
 function interesCompra(id) {
   const p = propiedades.find(x => x.id === id);
+  if (!p) return;
   cerrarModal();
-  mostrarToast(`¡Excelente elección! Un asesor te contactará sobre "${p.nombre}" en breve.`);
+  try {
+    const leads = JSON.parse(localStorage.getItem('inmo_leads') || '[]');
+    leads.push({
+      id: 'lead-' + Date.now(),
+      nombre: 'Interesado en propiedad',
+      email: '',
+      tel: '',
+      interes: 'Comprar: ' + p.nombre,
+      mensaje: 'El usuario hizo clic en "Quiero comprar" para: ' + p.nombre + ' (' + p.ubicacion + ') - ' + p.precio,
+      fecha: new Date().toLocaleString('es-MX'),
+      status: 'nuevo'
+    });
+    localStorage.setItem('inmo_leads', JSON.stringify(leads));
+  } catch(err) {}
+  mostrarToast('¡Excelente elección! Un asesor te contactará sobre "' + p.nombre + '" en breve.');
 }
 function enviarFormulario(e) {
   e.preventDefault();
+  const form = e.target;
+  const inputs = form.querySelectorAll('input, select, textarea');
+  let nombre = '', email = '', tel = '', interes = '', mensaje = '';
+  inputs.forEach(el => {
+    const ph = (el.placeholder || '').toLowerCase();
+    const label = (el.previousElementSibling?.textContent || '').toLowerCase();
+    const val = el.value || '';
+    if (el.type === 'email' || ph.includes('email') || label.includes('correo') || label.includes('email')) email = val;
+    else if (el.type === 'tel' || ph.includes('tel') || label.includes('teléfono') || label.includes('telefono')) tel = val;
+    else if (el.tagName === 'SELECT' || label.includes('intere')) interes = val;
+    else if (el.tagName === 'TEXTAREA' || label.includes('mensaje')) mensaje = val;
+    else if (el.type === 'text' || label.includes('nombre')) nombre = val || nombre;
+  });
+  // fallback order for text inputs
+  const texts = form.querySelectorAll('input[type="text"]');
+  if (!nombre && texts[0]) nombre = texts[0].value;
+  const lead = {
+    id: 'lead-' + Date.now(),
+    nombre: nombre || 'Sin nombre',
+    email: email || '',
+    tel: tel || '',
+    interes: interes || '',
+    mensaje: mensaje || '',
+    fecha: new Date().toLocaleString('es-MX'),
+    status: 'nuevo'
+  };
+  try {
+    const leads = JSON.parse(localStorage.getItem('inmo_leads') || '[]');
+    leads.push(lead);
+    localStorage.setItem('inmo_leads', JSON.stringify(leads));
+  } catch(err) {}
   mostrarToast('Mensaje enviado correctamente. Te contactaremos pronto.');
-  e.target.reset();
+  form.reset();
 }
 function mostrarToast(msg) {
   const t = document.getElementById('toast');
